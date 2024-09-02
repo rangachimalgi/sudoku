@@ -1,0 +1,243 @@
+.div-wrapper {
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+}
+
+.div-wrapper .page-2 {
+  background-color: #ffffff;
+  height: 1024px;
+  overflow: hidden;
+  position: relative;
+  width: 1440px;
+}
+
+.div-wrapper .text-wrapper-3 {
+  color: #000000;
+  font-family: "Lato", Helvetica;
+  font-size: 75px;
+  font-weight: 700;
+  left: 307px;
+  letter-spacing: 0;
+  line-height: normal;
+  position: absolute;
+  top: 175px;
+  width: 826px;
+}
+
+.div-wrapper .frame-2 {
+  box-shadow: 0px 4px 4px #00000040;
+  height: 133px;
+  left: 550px;
+  position: absolute;
+  top: 325px;
+  width: 339px;
+}
+
+.div-wrapper .group-4 {
+  height: 133px;
+  width: 341px;
+}
+
+.div-wrapper .overlap-group-3 {
+  background-color: #14213d;
+  border-radius: 10px;
+  height: 133px;
+  position: relative;
+  width: 339px;
+}
+
+.div-wrapper .text-wrapper-4 {
+  color: #ffffff;
+  font-family: "Lato", Helvetica;
+  font-size: 64px;
+  font-weight: 700;
+  left: 89px;
+  letter-spacing: 0;
+  line-height: normal;
+  position: absolute;
+  top: 28px;
+  width: 162px;
+}
+
+.div-wrapper .frame-3 {
+  box-shadow: 0px 4px 4px #00000040;
+  height: 133px;
+  left: 550px;
+  position: absolute;
+  top: 503px;
+  width: 339px;
+}
+
+.div-wrapper .text-wrapper-5 {
+  color: #ffffff;
+  font-family: "Lato", Helvetica;
+  font-size: 64px;
+  font-weight: 700;
+  left: 33px;
+  letter-spacing: 0;
+  line-height: normal;
+  position: absolute;
+  top: 28px;
+  width: 274px;
+}
+
+.div-wrapper .frame-4 {
+  box-shadow: 0px 4px 4px #00000040;
+  height: 133px;
+  left: 550px;
+  position: absolute;
+  top: 681px;
+  width: 339px;
+}
+
+.div-wrapper .text-wrapper-6 {
+  color: #ffffff;
+  font-family: "Lato", Helvetica;
+  font-size: 64px;
+  font-weight: 700;
+  left: 77px;
+  letter-spacing: 0;
+  line-height: normal;
+  position: absolute;
+  top: 28px;
+  width: 184px;
+}
+
+.div-wrapper .group-5 {
+  height: 100px;
+  left: -96px;
+  position: absolute;
+  top: 23px;
+  width: 1523px;
+}
+
+.div-wrapper .overlap-2 {
+  height: 100px;
+  left: 89px;
+  position: absolute;
+  top: 0;
+  width: 1432px;
+}
+
+.div-wrapper .rectangle-2 {
+  height: 100px;
+  left: 7px;
+  position: absolute;
+  top: 0;
+  width: 1425px;
+}
+
+.div-wrapper .text-wrapper-7 {
+  color: #ffffff;
+  font-family: "Lato", Helvetica;
+  font-size: 40px;
+  font-weight: 900;
+  left: 0;
+  letter-spacing: 0;
+  line-height: normal;
+  position: absolute;
+  top: 30px;
+  width: 380px;
+}
+
+.div-wrapper .navigation-3 {
+  align-items: center;
+  background-color: #ffffff;
+  border-radius: 6px;
+  display: flex;
+  gap: 40px;
+  height: 39px;
+  justify-content: center;
+  left: 1020px;
+  padding: 0px 20px;
+  position: absolute;
+  top: 30px;
+  width: 382px;
+}
+
+.div-wrapper .tab-3 {
+  color: #000000;
+  font-family: "Roboto", Helvetica;
+  font-size: 20px;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 24px;
+  position: relative;
+  white-space: nowrap;
+  width: fit-content;
+}
+
+.div-wrapper .game-3 {
+  height: 70px;
+  left: 15px;
+  object-fit: cover;
+  position: absolute;
+  top: 15px;
+  width: 74px;
+}
+
+.div-wrapper .frame-5 {
+  background-image: url(../../../static/img/rectangle-2.svg);
+  background-size: 100% 100%;
+  height: 100px;
+  left: 0;
+  position: absolute;
+  top: 924px;
+  width: 1440px;
+}
+
+.div-wrapper .container-5 {
+  align-items: center;
+  display: flex;
+  gap: 60px;
+  height: 100px;
+  justify-content: center;
+  left: 370px;
+  position: relative;
+  width: 698px;
+}
+
+.div-wrapper .title-10 {
+  align-self: stretch;
+  color: #ffffff;
+  font-family: "Roboto", Helvetica;
+  font-size: 20px;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 28px;
+  margin-top: -1px;
+  position: relative;
+  text-align: center;
+  width: 205px;
+}
+
+.div-wrapper .title-11 {
+  align-self: stretch;
+  color: #ffffff;
+  font-family: "Roboto", Helvetica;
+  font-size: 20px;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 28px;
+  margin-top: -1px;
+  position: relative;
+  text-align: center;
+  width: 150px;
+}
+
+.div-wrapper .title-12 {
+  align-self: stretch;
+  color: #ffffff;
+  font-family: "Roboto", Helvetica;
+  font-size: 20px;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 28px;
+  margin-top: -1px;
+  position: relative;
+  text-align: center;
+  width: 124px;
+}

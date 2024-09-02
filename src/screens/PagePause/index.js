@@ -1,0 +1,1 @@
+export { PagePause } from "./PagePause";

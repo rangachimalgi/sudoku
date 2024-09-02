@@ -1,0 +1,369 @@
+.page {
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+}
+
+.page .overlap-wrapper {
+  background-color: #ffffff;
+  height: 959px;
+  overflow: hidden;
+  width: 1440px;
+}
+
+.page .overlap {
+  height: 10203px;
+  left: -1px;
+  position: relative;
+  top: -1447px;
+  width: 3884px;
+}
+
+.page .group {
+  height: 100px;
+  left: 1px;
+  position: absolute;
+  top: 1447px;
+  width: 1442px;
+}
+
+.page .overlap-group {
+  background-image: url(../../../static/img/rectangle-2.svg);
+  background-size: 100% 100%;
+  height: 100px;
+  position: relative;
+  width: 1440px;
+}
+
+.page .text-wrapper {
+  color: #ffffff;
+  font-family: "Lato", Helvetica;
+  font-size: 40px;
+  font-weight: 900;
+  left: 84px;
+  letter-spacing: 0;
+  line-height: normal;
+  position: absolute;
+  top: 30px;
+  width: 360px;
+}
+
+.page .game {
+  height: 70px;
+  left: 14px;
+  object-fit: cover;
+  position: absolute;
+  top: 15px;
+  width: 70px;
+}
+
+.page .navigation {
+  align-items: center;
+  background-color: #ffffff;
+  border-radius: 6px;
+  display: flex;
+  gap: 40px;
+  height: 39px;
+  justify-content: center;
+  left: 1094px;
+  padding: 0px 20px;
+  position: absolute;
+  top: 30px;
+  width: 321px;
+}
+
+.page .tab {
+  color: #000000;
+  font-family: "Roboto", Helvetica;
+  font-size: 20px;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 24px;
+  position: relative;
+  white-space: nowrap;
+  width: fit-content;
+}
+
+.page .section {
+  align-items: center;
+  display: flex;
+  gap: 60px;
+  height: 10203px;
+  justify-content: center;
+  left: 0;
+  overflow: hidden;
+  padding: 60px 170px;
+  position: absolute;
+  top: 0;
+  width: 3884px;
+}
+
+.page .container {
+  align-items: center;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  flex-grow: 1;
+  gap: 24px;
+  position: relative;
+}
+
+.page .title {
+  color: #000000;
+  font-family: "Roboto", Helvetica;
+  font-size: 40px;
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 48px;
+  margin-top: -1px;
+  position: relative;
+  text-align: center;
+  width: 520px;
+}
+
+.page .description {
+  color: #000000;
+  font-family: "Roboto", Helvetica;
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 24px;
+  position: relative;
+  text-align: center;
+  width: 520px;
+}
+
+.page .input {
+  align-items: flex-start;
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  gap: 4px;
+  justify-content: center;
+  position: relative;
+  width: 600px;
+}
+
+.page .div {
+  align-self: stretch;
+  color: #000000;
+  font-family: "Roboto", Helvetica;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: 20px;
+  margin-top: -1px;
+  position: relative;
+}
+
+.page .textfield {
+  align-items: center;
+  align-self: stretch;
+  background-color: #ffffff;
+  border: 1px solid;
+  border-color: #0000001a;
+  border-radius: 6px;
+  display: flex;
+  flex: 0 0 auto;
+  gap: 4px;
+  padding: 8px 12px;
+  position: relative;
+  width: 100%;
+}
+
+.page .text {
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  color: #00000080;
+  display: -webkit-box;
+  flex: 1;
+  font-family: "Roboto", Helvetica;
+  font-size: 14px;
+  font-weight: 400;
+  height: 20px;
+  letter-spacing: 0;
+  line-height: 20px;
+  margin-top: -1px;
+  overflow: hidden;
+  position: relative;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.page .button {
+  all: unset;
+  align-items: flex-start;
+  box-sizing: border-box;
+  display: inline-flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  gap: 12px;
+  position: relative;
+}
+
+.page .primary {
+  align-items: center;
+  background-color: #14213d;
+  border-radius: 8px;
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  justify-content: center;
+  padding: 12px;
+  position: relative;
+  width: 160px;
+}
+
+.page .title-2 {
+  color: #ffffff;
+  font-family: "Roboto", Helvetica;
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: 24px;
+  margin-top: -1px;
+  position: relative;
+  white-space: nowrap;
+  width: fit-content;
+}
+
+.page .vector {
+  height: 1px;
+  left: 721px;
+  object-fit: cover;
+  position: absolute;
+  top: 13400px;
+  width: 3884px;
+}
+
+.page .section-2 {
+  align-items: center;
+  display: flex;
+  gap: 40px;
+  justify-content: center;
+  left: 0;
+  overflow: hidden;
+  padding: 60px 170px;
+  position: absolute;
+  top: 2063px;
+  width: 1440px;
+}
+
+.page .container-2 {
+  align-items: center;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  flex-grow: 1;
+  gap: 12px;
+  position: relative;
+}
+
+.page .title-3 {
+  align-self: stretch;
+  color: #000000;
+  font-family: "Roboto", Helvetica;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 32px;
+  margin-top: -1px;
+  position: relative;
+}
+
+.page .description-2 {
+  align-self: stretch;
+  color: #000000;
+  font-family: "Roboto", Helvetica;
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 24px;
+  position: relative;
+}
+
+.page .title-wrapper {
+  align-items: center;
+  background-color: #14213d;
+  border-radius: 8px;
+  display: inline-flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  justify-content: center;
+  padding: 12px;
+  position: relative;
+}
+
+.page .img {
+  height: 1px;
+  left: 1px;
+  object-fit: cover;
+  position: absolute;
+  top: 188px;
+  width: 1439px;
+}
+
+.page .frame {
+  background-image: url(../../../static/img/rectangle-2.svg);
+  background-size: 100% 100%;
+  height: 100px;
+  left: 1px;
+  position: absolute;
+  top: 2306px;
+  width: 1440px;
+}
+
+.page .container-3 {
+  align-items: center;
+  display: flex;
+  gap: 60px;
+  height: 100px;
+  justify-content: center;
+  left: 372px;
+  position: relative;
+  width: 698px;
+}
+
+.page .title-4 {
+  align-self: stretch;
+  color: #ffffff;
+  font-family: "Roboto", Helvetica;
+  font-size: 20px;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 28px;
+  margin-top: -1px;
+  position: relative;
+  text-align: center;
+  width: 205px;
+}
+
+.page .title-5 {
+  align-self: stretch;
+  color: #ffffff;
+  font-family: "Roboto", Helvetica;
+  font-size: 20px;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 28px;
+  margin-top: -1px;
+  position: relative;
+  text-align: center;
+  width: 150px;
+}
+
+.page .title-6 {
+  align-self: stretch;
+  color: #ffffff;
+  font-family: "Roboto", Helvetica;
+  font-size: 20px;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 28px;
+  margin-top: -1px;
+  position: relative;
+  text-align: center;
+  width: 124px;
+}

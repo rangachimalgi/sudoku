@@ -1,0 +1,196 @@
+.page-screen {
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+}
+
+.page-screen .overlap-group-wrapper {
+  background-color: #ffffff;
+  height: 1155px;
+  overflow: hidden;
+  width: 1440px;
+}
+
+.page-screen .overlap-group-2 {
+  height: 10330px;
+  position: relative;
+  top: -1px;
+  width: 3477px;
+}
+
+.page-screen .MASTER-SUDOKU {
+  color: #000000;
+  font-family: "Lato", Helvetica;
+  font-size: 110px;
+  font-weight: 700;
+  left: 251px;
+  letter-spacing: 0;
+  line-height: normal;
+  position: absolute;
+  text-align: center;
+  text-shadow: 0px 4px 4px #00000040;
+  top: 147px;
+  width: 939px;
+}
+
+.page-screen .group-wrapper {
+  height: 111px;
+  left: 540px;
+  position: absolute;
+  top: 850px;
+  width: 361px;
+}
+
+.page-screen .img-wrapper {
+  height: 111px;
+  position: relative;
+}
+
+.page-screen .group-2 {
+  height: 119px;
+  left: -4px;
+  position: absolute;
+  top: 0;
+  width: 369px;
+}
+
+.page-screen .group-3 {
+  height: 10330px;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 3477px;
+}
+
+.page-screen .rectangle {
+  height: 1155px;
+  left: 0;
+  position: absolute;
+  top: 1px;
+  width: 1440px;
+}
+
+.page-screen .text-wrapper-2 {
+  color: #ffffff;
+  font-family: "Lato", Helvetica;
+  font-size: 40px;
+  font-weight: 900;
+  left: 203px;
+  letter-spacing: 0;
+  line-height: normal;
+  position: absolute;
+  top: 3099px;
+  width: 869px;
+}
+
+.page-screen .game-2 {
+  height: 7231px;
+  left: 34px;
+  object-fit: cover;
+  position: absolute;
+  top: 1550px;
+  width: 169px;
+}
+
+.page-screen .navigation-2 {
+  align-items: center;
+  background-color: #ffffff;
+  border-radius: 6px;
+  display: flex;
+  gap: 40px;
+  height: auto; /* Make the height auto to fit the content */
+  justify-content: center;
+  left: 50%; /* Center the navigation */
+  padding: 10px 20px; /* Add some padding */
+  position: absolute;
+  top: 700px; /* Adjust this value to position it correctly on the page */
+  transform: translateX(-50%); /* Center horizontally */
+  width: auto; /* Adjust the width to fit the content */
+}
+
+
+.page-screen .tab-2 {
+  color: #000000;
+  font-family: "Roboto", Helvetica;
+  font-size: 20px;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 24px;
+  position: relative;
+  white-space: nowrap;
+  width: fit-content;
+}
+
+.page-screen .container-wrapper {
+  background-image: url(../../../static/img/rectangle-2.svg);
+  background-size: 100% 100%;
+  height: 100px;
+  left: 0;
+  position: absolute;
+  top: 1056px;
+  width: 1440px;
+}
+
+.page-screen .container-4 {
+  align-items: center;
+  display: flex;
+  gap: 60px;
+  height: 100px;
+  justify-content: center;
+  left: 371px;
+  position: relative;
+  width: 698px;
+}
+
+.page-screen .title-7 {
+  align-self: stretch;
+  color: #ffffff;
+  font-family: "Roboto", Helvetica;
+  font-size: 20px;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 28px;
+  margin-top: -1px;
+  position: relative;
+  text-align: center;
+  width: 205px;
+}
+
+.page-screen .title-8 {
+  align-self: stretch;
+  color: #ffffff;
+  font-family: "Roboto", Helvetica;
+  font-size: 20px;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 28px;
+  margin-top: -1px;
+  position: relative;
+  text-align: center;
+  width: 150px;
+}
+
+.page-screen .title-9 {
+  align-self: stretch;
+  color: #ffffff;
+  font-family: "Roboto", Helvetica;
+  font-size: 20px;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 28px;
+  margin-top: -1px;
+  position: relative;
+  text-align: center;
+  width: 124px;
+}
+
+.page-screen .element {
+  height: 391px;
+  left: 422px;
+  object-fit: cover;
+  position: absolute;
+  top: 441px;
+  width: 598px;
+}
