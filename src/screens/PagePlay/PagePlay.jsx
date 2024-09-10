@@ -1,35 +1,113 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "./PagePlaystyle.css";
 
+// Function to generate a valid Sudoku board
+const generateSudokuBoard = () => {
+  const grid = Array(9)
+    .fill(null)
+    .map(() => Array(9).fill(null));
+
+  const isValid = (grid, row, col, num) => {
+    for (let x = 0; x < 9; x++) {
+      if (grid[row][x] === num || grid[x][col] === num) return false;
+    }
+    const startRow = Math.floor(row / 3) * 3;
+    const startCol = Math.floor(col / 3) * 3;
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 3; j++) {
+        if (grid[startRow + i][startCol + j] === num) return false;
+      }
+    }
+    return true;
+  };
+
+  const fillGrid = (grid) => {
+    for (let row = 0; row < 9; row++) {
+      for (let col = 0; col < 9; col++) {
+        if (grid[row][col] === null) {
+          const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9].sort(
+            () => Math.random() - 0.5
+          );
+          for (let num of numbers) {
+            if (isValid(grid, row, col, num)) {
+              grid[row][col] = num;
+              if (fillGrid(grid)) return true;
+              grid[row][col] = null;
+            }
+          }
+          return false;
+        }
+      }
+    }
+    return true;
+  };
+
+  fillGrid(grid);
+  return grid;
+};
+
+// Function to remove numbers from the grid to create the puzzle
+const removeNumbers = (grid, difficulty = "easy") => {
+  const newGrid = grid.map((row) => [...row]);
+  let attempts = difficulty === "hard" ? 50 : difficulty === "medium" ? 40 : 30;
+
+  while (attempts > 0) {
+    const row = Math.floor(Math.random() * 9);
+    const col = Math.floor(Math.random() * 9);
+    if (newGrid[row][col] !== null) {
+      newGrid[row][col] = null;
+      attempts--;
+    }
+  }
+  return newGrid;
+};
+
+const isValidMove = (grid, row, col, num) => {
+  for (let x = 0; x < 9; x++) {
+    if (grid[row][x] === num || grid[x][col] === num) return false;
+  }
+  const startRow = Math.floor(row / 3) * 3;
+  const startCol = Math.floor(col / 3) * 3;
+  for (let i = 0; i < 3; i++) {
+    for (let j = 0; j < 3; j++) {
+      if (grid[startRow + i][startCol + j] === num) return false;
+    }
+  }
+  return true;
+};
+
 export const PagePlay = () => {
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate();
+  const [grid, setGrid] = useState([]);
+  const [selectedCell, setSelectedCell] = useState({ row: null, col: null });
 
-  // Initialize the 9x9 grid with some pre-filled values and nulls for empty spaces
-  const [grid, setGrid] = useState([
-    [3, 4, null, 6, null, null, 7, null, null],
-    [1, null, 6, null, 3, 2, 4, 5, null],
-    [null, null, null, 7, 8, 1, null, null, 6],
-    [null, 8, null, null, null, null, 9, 6, null],
-    [6, 7, null, null, 9, 5, null, 4, null],
-    [null, 9, null, 2, null, null, 5, null, null],
-    [null, 6, null, null, null, 9, 3, 8, null],
-    [null, null, 9, 2, 5, 7, 1, 4, null],
-    [7, null, 1, null, 4, 8, null, null, 9],
-  ]);
+  useEffect(() => {
+    const fullGrid = generateSudokuBoard();
+    const puzzleGrid = removeNumbers(fullGrid, "easy");
+    setGrid(puzzleGrid);
+  }, []);
 
-  // Handle user input for editing the grid
+  const handleGridClick = () => {
+    setSelectedCell({ row: null, col: null }); // Reset selection when clicking outside the grid
+  };
+  
+
   const handleInputChange = (rowIndex, colIndex, value) => {
-    if (value >= 1 && value <= 9) {
-      const newGrid = grid.map((row, i) =>
-        row.map((cell, j) => (i === rowIndex && j === colIndex ? parseInt(value, 10) : cell))
-      );
-      setGrid(newGrid);
-    } else if (value === "") {
-      const newGrid = grid.map((row, i) =>
-        row.map((cell, j) => (i === rowIndex && j === colIndex ? null : cell))
-      );
-      setGrid(newGrid);
+    if (value === "" || (value >= 1 && value <= 9)) {
+      const parsedValue = parseInt(value, 10);
+      if (!value || isValidMove(grid, rowIndex, colIndex, parsedValue)) {
+        const newGrid = grid.map((row, i) =>
+          row.map((cell, j) =>
+            i === rowIndex && j === colIndex ? (value ? parsedValue : null) : cell
+          )
+        );
+        setGrid(newGrid);
+      } else {
+        alert("Invalid move! This number conflicts with Sudoku rules.");
+      }
+    } else {
+      alert("Please enter a number between 1 and 9.");
     }
   };
 
@@ -44,13 +122,33 @@ export const PagePlay = () => {
             maxLength="1"
             value={cell || ""}
             onChange={(e) => handleInputChange(rowIndex, colIndex, e.target.value)}
-            readOnly={cell !== null} // Make the pre-filled cells read-only
+            onClick={() => setSelectedCell({ row: rowIndex, col: colIndex })}
+            readOnly={cell !== null} // Pre-filled cells are read-only
           />
         ))}
       </div>
     ));
   };
-    
+  const handleNumberClick = (number) => {
+    if (selectedCell.row !== null && selectedCell.col !== null) {
+      if (isValidMove(grid, selectedCell.row, selectedCell.col, number)) {
+        const newGrid = grid.map((row, i) =>
+          row.map((cell, j) => {
+            if (i === selectedCell.row && j === selectedCell.col) {
+              return number; // Set the clicked number to the active cell
+            }
+            return cell;
+          })
+        );
+        setGrid(newGrid);
+      } else {
+        alert("Invalid move! This number conflicts with Sudoku rules.");
+      }
+    } else {
+      alert("Please select a cell first!");
+    }
+  };    
+
   // Navigate to /page-5 on "New Game" click
   const handleNewGameClick = () => {
     navigate("/page-5");
@@ -77,58 +175,16 @@ export const PagePlay = () => {
         <div className="group-9">
           <div className="overlap-6">
             {/* Number buttons */}
-            <div className="group-10">
-              <div className="frame-11">
-                <div className="group-11">
-                  <div className="overlap-group-6">
-                    <div className="text-wrapper-16">1</div>
-                  </div>
-                </div>
-              </div>
-              <div className="group-12">
-                <div className="overlap-7">
-                  <div className="text-wrapper-17">2</div>
-                </div>
-              </div>
-              <div className="group-13">
-                <div className="overlap-7">
-                  <div className="text-wrapper-18">3</div>
-                </div>
-              </div>
-              <div className="frame-12">
-                <div className="group-11">
-                  <div className="overlap-group-6">
-                    <div className="text-wrapper-19">7</div>
-                  </div>
-                </div>
-              </div>
-              <div className="group-14">
-                <div className="overlap-7">
-                  <div className="text-wrapper-18">8</div>
-                </div>
-              </div>
-              <div className="group-15">
-                <div className="overlap-7">
-                  <div className="text-wrapper-18">9</div>
-                </div>
-              </div>
-              <div className="frame-13">
-                <div className="group-11">
-                  <div className="overlap-group-6">
-                    <div className="text-wrapper-19">4</div>
-                  </div>
-                </div>
-              </div>
-              <div className="group-16">
-                <div className="overlap-7">
-                  <div className="text-wrapper-20">5</div>
-                </div>
-              </div>
-              <div className="group-17">
-                <div className="overlap-7">
-                  <div className="text-wrapper-18">6</div>
-                </div>
-              </div>
+            <div className="number-buttons">
+              {Array.from({ length: 9 }, (_, i) => (
+                <button
+                  key={i}
+                  className="sudoku-number"
+                  onClick={() => handleNumberClick(i + 1)}
+                >
+                  {i + 1}
+                </button>
+              ))}
             </div>
 
             {/* Additional controls */}
@@ -138,7 +194,11 @@ export const PagePlay = () => {
             </div>
             <div className="noun-notes">
               <div className="overlap-8">
-                <img className="vector-4" alt="Vector" src="/img/vector-1.svg" />
+                <img
+                  className="vector-4"
+                  alt="Vector"
+                  src="/img/vector-1.svg"
+                />
                 <div className="group-18">
                   <div className="overlap-group-7">
                     <div className="text-wrapper-22">OFF</div>
@@ -149,7 +209,11 @@ export const PagePlay = () => {
             </div>
             <div className="group-19">
               <div className="overlap-9">
-                <img className="noun-hint" alt="Noun hint" src="/img/noun-hint-2018232-1.svg" />
+                <img
+                  className="noun-hint"
+                  alt="Noun hint"
+                  src="/img/noun-hint-2018232-1.svg"
+                />
                 <div className="text-wrapper-24">Hint</div>
               </div>
             </div>
@@ -174,7 +238,10 @@ export const PagePlay = () => {
             <div className="text-wrapper-28">MASTER SUDOKU</div>
             <img className="game-6" alt="Game" src="/img/game-1.png" />
             <div className="navigation-6">
-              <div className="tab-6" onClick={handleNewGameClick}>New Game</div> {/* Add onClick handler */}
+              <div className="tab-6" onClick={handleNewGameClick}>
+                New Game
+              </div>{" "}
+              {/* Add onClick handler */}
               <div className="tab-6">Rules</div>
               <div className="tab-6">Tips</div>
             </div>

@@ -720,6 +720,37 @@
   background-color: #e6e6e6; /* Slightly darker color for alternating cells */
 }
 
+.number-buttons {
+  display: flex;
+  flex-wrap: wrap; /* Wrap elements to the next line as needed */
+  justify-content: space-between; /* Evenly space content */
+  width: 156px; /* Adjust width to ensure 3 buttons fit per row */
+  margin: 0 auto; /* Center the container horizontally */
+  padding: 5px; /* Padding inside the container */
+}
+
+.sudoku-number {
+  background-color: #2C2C2E;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  margin: 4px; /* Margins between buttons */
+  width: 48px; /* Adjust width to fit three across based on container width */
+  height: 48px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.sudoku-number:hover {
+  background-color: #404040;
+}
+
+.sudoku-cell.selected {
+  background-color: #add8e6; /* Light blue background for the selected cell */
+}
+
 /* Optional: Adjust font size for different screen sizes */
 @media (max-width: 768px) {
   .sudoku-cell {
