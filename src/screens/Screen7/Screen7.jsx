@@ -97,6 +97,8 @@ export const Screen7 = () => {
   const [selectedCell, setSelectedCell] = useState({ row: null, col: null });
   const [difficulty, setDifficulty] = useState("easy");
   const [initialGrid, setInitialGrid] = useState([]); // Store the original puzzle grid
+  const [history, setHistory] = useState([]); // Stores grid states for undo/redo
+  const [currentStep, setCurrentStep] = useState(0); // Tracks current position in the history
 
   useEffect(() => {
     const fullGrid = generateSudokuBoard();
@@ -127,7 +129,6 @@ export const Screen7 = () => {
   // Handle input change in the grid
   const handleInputChange = (rowIndex, colIndex, value) => {
     if (value.match(/^[1-9a-gA-G]?$|^$/)) {
-      // Allow hexadecimal values (1-9, A-F, and G)
       const newValue = value.toUpperCase();
       if (newValue && !isValidMove(grid, rowIndex, colIndex, newValue)) {
         alert("Invalid move! This number conflicts with Sudoku rules.");
@@ -137,7 +138,11 @@ export const Screen7 = () => {
             rIndex === rowIndex && cIndex === colIndex ? newValue : cell
           )
         );
-        setGrid(newGrid);
+
+        const newHistory = history.slice(0, currentStep + 1); // Remove any "future" states
+        setHistory([...newHistory, newGrid]); // Add the new grid to history
+        setCurrentStep(newHistory.length); // Update the current step
+        setGrid(newGrid); // Update the grid
       }
     }
   };
@@ -151,11 +156,36 @@ export const Screen7 = () => {
   const handleNumberButtonClick = (number) => {
     const { row, col } = selectedCell;
     if (row !== null && col !== null) {
-      handleInputChange(row, col, number);
+      const newValue = number.toUpperCase();
+      const newGrid = grid.map((row, rIndex) =>
+        row.map((cell, cIndex) =>
+          rIndex === row && cIndex === col ? newValue : cell
+        )
+      );
+
+      const newHistory = history.slice(0, currentStep + 1); // Remove any "future" states
+      setHistory([...newHistory, newGrid]); // Add the new grid to history
+      setCurrentStep(newHistory.length); // Update the current step
+      setGrid(newGrid); // Update the grid
     } else {
       alert("Please select a cell first!");
     }
   };
+
+  const handleUndoClick = () => {
+    if (currentStep > 0) {
+      setCurrentStep(currentStep - 1);
+      setGrid(history[currentStep - 1]); // Set the grid to the previous state
+    }
+  };
+
+  const handleRedoClick = () => {
+    if (currentStep < history.length - 1) {
+      setCurrentStep(currentStep + 1);
+      setGrid(history[currentStep + 1]); // Set the grid to the next state
+    }
+  };
+  
 
   // Navigate to /page-5 on "New Game" click
   const handleNewGameClick = () => {
@@ -168,7 +198,6 @@ export const Screen7 = () => {
     setGrid(puzzleGrid); // Set the new grid
     setInitialGrid(puzzleGrid); // Store the new grid as the initial grid for reset functionality
   };
-  
 
   return (
     <div className="screen-7">
@@ -256,13 +285,13 @@ export const Screen7 = () => {
               </div>
             </div>
             <div className="group-47">
-              <div className="overlap-24">
+              <div className="overlap-24" onClick={handleUndoClick}>
                 <img className="img-4" alt="Undo" src="/img/undo-2.svg" />
                 <div className="text-wrapper-53">Undo</div>
               </div>
             </div>
             <div className="group-48">
-              <div className="overlap-24">
+              <div className="overlap-24" onClick={handleRedoClick}>
                 <img className="img-4" alt="Redo" src="/img/redo-2.svg" />
                 <div className="text-wrapper-54">Redo</div>
               </div>
@@ -333,7 +362,9 @@ export const Screen7 = () => {
             </div>
           </div>
           <div className="group-51">
-            <div className="text-wrapper-56" onClick={handleRestartClick}>Restart</div>
+            <div className="text-wrapper-56" onClick={handleRestartClick}>
+              Restart
+            </div>
             <img className="vector-13" alt="Vector" src="/img/vector-2.svg" />
           </div>
           <div className="group-52" onClick={handleResetClick}>

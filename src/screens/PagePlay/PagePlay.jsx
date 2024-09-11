@@ -87,6 +87,8 @@ export const PagePlay = () => {
   const [initialGrid, setInitialGrid] = useState([]); // Store the original puzzle grid
   const [selectedCell, setSelectedCell] = useState({ row: null, col: null });
   const [difficulty, setDifficulty] = useState("easy");
+  const [history, setHistory] = useState([]); // Stores grid states for undo/redo
+  const [currentStep, setCurrentStep] = useState(0); // Tracks current position in the history
 
   useEffect(() => {
     const fullGrid = generateSudokuBoard();
@@ -112,7 +114,11 @@ export const PagePlay = () => {
               : cell
           )
         );
-        setGrid(newGrid);
+        // Update history
+        const newHistory = history.slice(0, currentStep + 1); // Remove any "future" states
+        setHistory([...newHistory, newGrid]);
+        setCurrentStep(newHistory.length); // Update the current step
+        setGrid(newGrid); // Set the new grid
       } else {
         alert("Invalid move! This number conflicts with Sudoku rules.");
       }
@@ -150,14 +156,15 @@ export const PagePlay = () => {
     if (selectedCell.row !== null && selectedCell.col !== null) {
       if (isValidMove(grid, selectedCell.row, selectedCell.col, number)) {
         const newGrid = grid.map((row, i) =>
-          row.map((cell, j) => {
-            if (i === selectedCell.row && j === selectedCell.col) {
-              return number; // Set the clicked number to the active cell
-            }
-            return cell;
-          })
+          row.map((cell, j) =>
+            i === selectedCell.row && j === selectedCell.col ? number : cell
+          )
         );
-        setGrid(newGrid);
+        // Update history
+        const newHistory = history.slice(0, currentStep + 1); // Remove any "future" states
+        setHistory([...newHistory, newGrid]);
+        setCurrentStep(newHistory.length); // Update the current step
+        setGrid(newGrid); // Set the new grid
       } else {
         alert("Invalid move! This number conflicts with Sudoku rules.");
       }
@@ -166,6 +173,20 @@ export const PagePlay = () => {
     }
   };
 
+  const handleUndoClick = () => {
+    if (currentStep > 0) {
+      setCurrentStep(currentStep - 1);
+      setGrid(history[currentStep - 1]); // Set the previous grid state
+    }
+  };
+
+  const handleRedoClick = () => {
+    if (currentStep < history.length - 1) {
+      setCurrentStep(currentStep + 1);
+      setGrid(history[currentStep + 1]); // Set the next grid state
+    }
+  };
+  
   // Navigate to /page-5 on "New Game" click
   const handleNewGameClick = () => {
     navigate("/page-5");
@@ -177,7 +198,6 @@ export const PagePlay = () => {
     setGrid(puzzleGrid); // Set the new grid
     setInitialGrid(puzzleGrid); // Store the new grid as the initial grid for reset functionality
   };
-  
 
   return (
     <div className="page-play">
@@ -198,8 +218,12 @@ export const PagePlay = () => {
         <div className="sudoku-grid">{renderGrid()}</div>
 
         <div className="group-9">
-          <p>Select Difficulty</p> <br/>
-          <select value={difficulty} onChange={(e) => setDifficulty(e.target.value)} className="difficulty-select">
+          <p>Select Difficulty</p> <br />
+          <select
+            value={difficulty}
+            onChange={(e) => setDifficulty(e.target.value)}
+            className="difficulty-select"
+          >
             <option value="easy">Easy</option>
             <option value="medium">Medium</option>
             <option value="hard">Hard</option>
@@ -249,13 +273,13 @@ export const PagePlay = () => {
               </div>
             </div>
             <div className="group-20">
-              <div className="overlap-10">
+              <div className="overlap-10" onClick={handleUndoClick}>
                 <img className="img-2" alt="Undo" src="/img/undo.svg" />
                 <div className="text-wrapper-25">Undo</div>
               </div>
             </div>
             <div className="group-21">
-              <div className="overlap-10">
+              <div className="overlap-10" onClick={handleRedoClick}>
                 <img className="img-2" alt="Redo" src="/img/redo.svg" />
                 <div className="text-wrapper-26">Redo</div>
               </div>
@@ -285,11 +309,15 @@ export const PagePlay = () => {
           </div>
         </div>
         <div className="group-23">
-          <div className="text-wrapper-29" onClick={handleRestartClick}>Restart</div>
+          <div className="text-wrapper-29" onClick={handleRestartClick}>
+            Restart
+          </div>
           <img className="vector-5" alt="Vector" src="/img/vector-2.svg" />
         </div>
         <div className="group-24">
-          <div className="text-wrapper-29" onClick={handleResetClick}>Reset</div>
+          <div className="text-wrapper-29" onClick={handleResetClick}>
+            Reset
+          </div>
           <img className="vector-6" alt="Vector" src="/img/vector-2.svg" />
         </div>
         <div className="group-25">

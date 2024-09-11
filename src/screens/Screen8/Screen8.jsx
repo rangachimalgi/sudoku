@@ -27,10 +27,40 @@ const generateSudokuBoard = () => {
 
   const fillGrid = (grid) => {
     const symbols = [
-      "1", "2", "3", "4", "5", "6", "7", "8", "9",
-      "A", "B", "C", "D", "E", "F", "G", "H", "I", "J",
-      "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T",
-      "U", "V", "W", "X", "Y"
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "A",
+      "B",
+      "C",
+      "D",
+      "E",
+      "F",
+      "G",
+      "H",
+      "I",
+      "J",
+      "K",
+      "L",
+      "M",
+      "N",
+      "O",
+      "P",
+      "Q",
+      "R",
+      "S",
+      "T",
+      "U",
+      "V",
+      "W",
+      "X",
+      "Y",
     ];
 
     for (let row = 0; row < 25; row++) {
@@ -57,19 +87,19 @@ const generateSudokuBoard = () => {
 
 // Function to remove numbers to create the puzzle
 const removeNumbers = (grid, difficulty) => {
-  const newGrid = grid.map(row => [...row]);  // Creates a deep copy of the grid
-  let attempts;  // This needs to be a let since its value will change
+  const newGrid = grid.map((row) => [...row]); // Creates a deep copy of the grid
+  let attempts; // This needs to be a let since its value will change
 
   switch (difficulty) {
-    case 'hard':
-      attempts = 375;  // More cells are cleared
+    case "hard":
+      attempts = 375; // More cells are cleared
       break;
-    case 'medium':
+    case "medium":
       attempts = 313;
       break;
-    case 'easy':
+    case "easy":
     default:
-      attempts = 250;  // Fewer cells are cleared
+      attempts = 250; // Fewer cells are cleared
       break;
   }
 
@@ -78,12 +108,11 @@ const removeNumbers = (grid, difficulty) => {
     const col = Math.floor(Math.random() * 25);
     if (newGrid[row][col] !== null) {
       newGrid[row][col] = null;
-      attempts--;  // Properly decrement attempts
+      attempts--; // Properly decrement attempts
     }
   }
   return newGrid;
 };
-
 
 export const Screen8 = () => {
   const navigate = useNavigate();
@@ -95,17 +124,28 @@ export const Screen8 = () => {
   const [selectedCell, setSelectedCell] = useState({ row: null, col: null });
   const [difficulty, setDifficulty] = useState("easy");
   const [initialGrid, setInitialGrid] = useState([]); // Store the original puzzle grid
+  const [history, setHistory] = useState([]); // Stores grid states for undo/redo
+  const [currentStep, setCurrentStep] = useState(0); // Tracks current position in the history
 
   useEffect(() => {
+    // Generate a new Sudoku board based on difficulty
     const fullGrid = generateSudokuBoard();
     const puzzleGrid = removeNumbers(fullGrid, difficulty);
     setGrid(puzzleGrid);
     setInitialGrid(puzzleGrid); // Store the initial puzzle grid for resetting
+
+    // Add initial grid state to history
+    const initialHistory = [puzzleGrid];
+    setHistory(initialHistory);
+    setCurrentStep(0); // Reset step counter
   }, [difficulty]);
 
   const handleResetClick = () => {
     setGrid(initialGrid); // Reset the current grid to the original puzzle
-  };  
+    const resetHistory = [initialGrid]; // Reset history with the initial grid
+    setHistory(resetHistory);
+    setCurrentStep(0); // Reset step counter
+  };
 
   // Check if a move is valid according to Sudoku rules
   const isValidMove = (grid, row, col, value) => {
@@ -122,7 +162,7 @@ export const Screen8 = () => {
     return true;
   };
 
-  // Handle input change in the grid
+  // Handle input change in the grid and save to history
   const handleInputChange = (rowIndex, colIndex, value) => {
     if (value.match(/^[1-9a-yA-Y]?$|^$/)) {
       const newValue = value.toUpperCase();
@@ -134,8 +174,29 @@ export const Screen8 = () => {
             rIndex === rowIndex && cIndex === colIndex ? newValue : cell
           )
         );
-        setGrid(newGrid);
+
+        // Update history when a valid move is made
+        const newHistory = history.slice(0, currentStep + 1); // Remove any "future" states after the current step
+        setHistory([...newHistory, newGrid]); // Add the new grid to history
+        setCurrentStep(newHistory.length); // Update the current step to reflect the latest move
+        setGrid(newGrid); // Update the grid
       }
+    }
+  };
+
+  // Handle Undo action: Go back one step in the history
+  const handleUndoClick = () => {
+    if (currentStep > 0) {
+      setCurrentStep(currentStep - 1); // Move one step back
+      setGrid(history[currentStep - 1]); // Set the grid to the previous state
+    }
+  };
+
+  // Handle Redo action: Go forward one step in the history
+  const handleRedoClick = () => {
+    if (currentStep < history.length - 1) {
+      setCurrentStep(currentStep + 1); // Move one step forward
+      setGrid(history[currentStep + 1]); // Set the grid to the next state
     }
   };
 
@@ -148,6 +209,11 @@ export const Screen8 = () => {
     const puzzleGrid = removeNumbers(fullGrid, difficulty); // Remove numbers based on difficulty
     setGrid(puzzleGrid); // Set the new grid
     setInitialGrid(puzzleGrid); // Store the new grid as the initial grid for reset functionality
+
+    // Reset history
+    const resetHistory = [puzzleGrid];
+    setHistory(resetHistory);
+    setCurrentStep(0); // Reset step counter
   };
 
   return (
@@ -155,7 +221,7 @@ export const Screen8 = () => {
       <div className="page-6">
         {/* <div className="text-wrapper-57">Difficulty: Medium</div> */}
         <div className="text-wrapper-58">Sudoku 25 x 25</div>
-       
+
         <div className="screen8-sudoku-grid">
           {grid.map((row, rowIndex) => (
             <div className="screen8-sudoku-row" key={rowIndex}>
@@ -166,7 +232,9 @@ export const Screen8 = () => {
                   type="text"
                   maxLength={1}
                   value={cell || ""}
-                  onClick={() => setSelectedCell({ row: rowIndex, col: colIndex })}
+                  onClick={() =>
+                    setSelectedCell({ row: rowIndex, col: colIndex })
+                  }
                   onChange={(e) =>
                     handleInputChange(
                       rowIndex,
@@ -180,7 +248,7 @@ export const Screen8 = () => {
             </div>
           ))}
         </div>
-       
+
         <div className="div-6">
           <div className="div-6">
             <div className="overlap-group-13">
@@ -231,13 +299,13 @@ export const Screen8 = () => {
               </div>
             </div>
             <div className="group-57">
-              <div className="overlap-28">
+              <div className="overlap-28" onClick={handleUndoClick}>
                 <img className="img-5" alt="Undo" src="/img/undo-3.svg" />
                 <div className="text-wrapper-64">Undo</div>
               </div>
             </div>
             <div className="group-58">
-              <div className="overlap-28">
+              <div className="overlap-28" onClick={handleRedoClick}>
                 <img className="img-5" alt="Redo" src="/img/redo-3.svg" />
                 <div className="text-wrapper-65">Redo</div>
               </div>
@@ -245,24 +313,61 @@ export const Screen8 = () => {
           </div>
         </div>
         <div className="frame-24">
-          <p>Select Difficulty</p><br/>
-        <select value={difficulty} onChange={(e) => setDifficulty(e.target.value)} className="difficulty-select">
-          <option value="easy">Easy</option>
-          <option value="medium">Medium</option>
-          <option value="hard">Hard</option>
-        </select>
+          <p>Select Difficulty</p>
+          <br />
+          <select
+            value={difficulty}
+            onChange={(e) => setDifficulty(e.target.value)}
+            className="difficulty-select"
+          >
+            <option value="easy">Easy</option>
+            <option value="medium">Medium</option>
+            <option value="hard">Hard</option>
+          </select>
           <div className="group-59">
             {/* Number buttons for input */}
             {[
-              "1", "2", "3", "4", "5", "6", "7", "8", "9",
-              "A", "B", "C", "D", "E", "F", "G", "H", "I", "J",
-              "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T",
-              "U", "V", "W", "X", "Y"
+              "1",
+              "2",
+              "3",
+              "4",
+              "5",
+              "6",
+              "7",
+              "8",
+              "9",
+              "A",
+              "B",
+              "C",
+              "D",
+              "E",
+              "F",
+              "G",
+              "H",
+              "I",
+              "J",
+              "K",
+              "L",
+              "M",
+              "N",
+              "O",
+              "P",
+              "Q",
+              "R",
+              "S",
+              "T",
+              "U",
+              "V",
+              "W",
+              "X",
+              "Y",
             ].map((number) => (
               <button
                 key={number}
                 className="number-button"
-                onClick={() => handleInputChange(selectedCell.row, selectedCell.col, number)}
+                onClick={() =>
+                  handleInputChange(selectedCell.row, selectedCell.col, number)
+                }
               >
                 {number}
               </button>
@@ -290,7 +395,9 @@ export const Screen8 = () => {
             </div>
           </div>
           <div className="group-87">
-            <div className="text-wrapper-83" onClick={handleRestartClick}>Restart</div>
+            <div className="text-wrapper-83" onClick={handleRestartClick}>
+              Restart
+            </div>
             <img className="vector-17" alt="Vector" src="/img/vector-2.svg" />
           </div>
           <div className="group-88" onClick={handleResetClick}>
