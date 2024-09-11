@@ -50,8 +50,12 @@ const generateSudokuBoard = () => {
 // Function to remove numbers from the grid to create the puzzle
 const removeNumbers = (grid, difficulty = "easy") => {
   const newGrid = grid.map((row) => [...row]);
-  let attempts = difficulty === "hard" ? 50 : difficulty === "medium" ? 40 : 30;
-
+  let attempts = 30; // Easy by default
+  if (difficulty === "medium") {
+    attempts = 40; // Medium difficulty
+  } else if (difficulty === "hard") {
+    attempts = 50; // Hard difficulty
+  }
   while (attempts > 0) {
     const row = Math.floor(Math.random() * 9);
     const col = Math.floor(Math.random() * 9);
@@ -81,17 +85,17 @@ export const PagePlay = () => {
   const navigate = useNavigate();
   const [grid, setGrid] = useState([]);
   const [selectedCell, setSelectedCell] = useState({ row: null, col: null });
+  const [difficulty, setDifficulty] = useState("easy");
 
   useEffect(() => {
     const fullGrid = generateSudokuBoard();
-    const puzzleGrid = removeNumbers(fullGrid, "easy");
+    const puzzleGrid = removeNumbers(fullGrid, difficulty);
     setGrid(puzzleGrid);
-  }, []);
+  }, [difficulty]); // Re-generate when difficulty changes
 
   const handleGridClick = () => {
     setSelectedCell({ row: null, col: null }); // Reset selection when clicking outside the grid
   };
-  
 
   const handleInputChange = (rowIndex, colIndex, value) => {
     if (value === "" || (value >= 1 && value <= 9)) {
@@ -99,7 +103,11 @@ export const PagePlay = () => {
       if (!value || isValidMove(grid, rowIndex, colIndex, parsedValue)) {
         const newGrid = grid.map((row, i) =>
           row.map((cell, j) =>
-            i === rowIndex && j === colIndex ? (value ? parsedValue : null) : cell
+            i === rowIndex && j === colIndex
+              ? value
+                ? parsedValue
+                : null
+              : cell
           )
         );
         setGrid(newGrid);
@@ -121,7 +129,9 @@ export const PagePlay = () => {
             type="text"
             maxLength="1"
             value={cell || ""}
-            onChange={(e) => handleInputChange(rowIndex, colIndex, e.target.value)}
+            onChange={(e) =>
+              handleInputChange(rowIndex, colIndex, e.target.value)
+            }
             onClick={() => setSelectedCell({ row: rowIndex, col: colIndex })}
             readOnly={cell !== null} // Pre-filled cells are read-only
           />
@@ -147,7 +157,7 @@ export const PagePlay = () => {
     } else {
       alert("Please select a cell first!");
     }
-  };    
+  };
 
   // Navigate to /page-5 on "New Game" click
   const handleNewGameClick = () => {
@@ -173,6 +183,12 @@ export const PagePlay = () => {
         <div className="sudoku-grid">{renderGrid()}</div>
 
         <div className="group-9">
+          <p>Select Difficulty</p> <br/>
+        <select value={difficulty} onChange={(e) => setDifficulty(e.target.value)} className="difficulty-select">
+          <option value="easy">Easy</option>
+          <option value="medium">Medium</option>
+          <option value="hard">Hard</option>
+        </select>
           <div className="overlap-6">
             {/* Number buttons */}
             <div className="number-buttons">

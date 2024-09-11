@@ -67,9 +67,14 @@ const generateSudokuBoard = () => {
 };
 
 // Function to remove numbers to create the puzzle
-const removeNumbers = (grid, difficulty = "easy") => {
+const removeNumbers = (grid, difficulty) => {
   const newGrid = grid.map((row) => [...row]);
-  let attempts = difficulty === "hard" ? 70 : difficulty === "medium" ? 60 : 50;
+  let attempts = 50; // Default for easy
+  if (difficulty === "medium") {
+    attempts = 60;
+  } else if (difficulty === "hard") {
+    attempts = 70;
+  }
 
   while (attempts > 0) {
     const row = Math.floor(Math.random() * 16);
@@ -90,12 +95,13 @@ export const Screen7 = () => {
     Array.from({ length: 16 }, () => Array(16).fill(""))
   );
   const [selectedCell, setSelectedCell] = useState({ row: null, col: null });
+  const [difficulty, setDifficulty] = useState("easy");
 
   useEffect(() => {
     const fullGrid = generateSudokuBoard();
-    const puzzleGrid = removeNumbers(fullGrid, "easy");
+    const puzzleGrid = removeNumbers(fullGrid, difficulty);
     setGrid(puzzleGrid);
-  }, []);
+  }, [difficulty]);
 
   // Check if a move is valid according to Sudoku rules
   const isValidMove = (grid, row, col, value) => {
@@ -250,6 +256,12 @@ export const Screen7 = () => {
           </div>
         </div>
         <div className="frame-20">
+          <p>Select Difficulty</p><br/>
+        <select value={difficulty} onChange={(e) => setDifficulty(e.target.value)} className="difficulty-select">
+          <option value="easy">Easy</option>
+          <option value="medium">Medium</option>
+          <option value="hard">Hard</option>
+        </select>
           {/* <img className="group-49" alt="Group" src="/img/group-30.png" /> */}
           <div className="button-box">
             {[

@@ -1,29 +1,142 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./style.css";
+
+// Function to generate a valid 25x25 Sudoku board
+const generateSudokuBoard = () => {
+  const grid = Array(25)
+    .fill(null)
+    .map(() => Array(25).fill(null));
+
+  const isValid = (grid, row, col, num) => {
+    // Check if the number is not already in the current row or column
+    for (let x = 0; x < 25; x++) {
+      if (grid[row][x] === num || grid[x][col] === num) return false;
+    }
+
+    // Check the 5x5 subgrid
+    const startRow = Math.floor(row / 5) * 5;
+    const startCol = Math.floor(col / 5) * 5;
+    for (let i = 0; i < 5; i++) {
+      for (let j = 0; j < 5; j++) {
+        if (grid[startRow + i][startCol + j] === num) return false;
+      }
+    }
+    return true;
+  };
+
+  const fillGrid = (grid) => {
+    const symbols = [
+      "1", "2", "3", "4", "5", "6", "7", "8", "9",
+      "A", "B", "C", "D", "E", "F", "G", "H", "I", "J",
+      "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T",
+      "U", "V", "W", "X", "Y"
+    ];
+
+    for (let row = 0; row < 25; row++) {
+      for (let col = 0; col < 25; col++) {
+        if (grid[row][col] === null) {
+          const shuffledSymbols = symbols.sort(() => Math.random() - 0.5);
+          for (let symbol of shuffledSymbols) {
+            if (isValid(grid, row, col, symbol)) {
+              grid[row][col] = symbol;
+              if (fillGrid(grid)) return true;
+              grid[row][col] = null; // Reset on failure
+            }
+          }
+          return false; // Backtrack
+        }
+      }
+    }
+    return true;
+  };
+
+  fillGrid(grid); // Generate a fully filled Sudoku board
+  return grid;
+};
+
+// Function to remove numbers to create the puzzle
+const removeNumbers = (grid, difficulty) => {
+  const newGrid = grid.map(row => [...row]);  // Creates a deep copy of the grid
+  let attempts;  // This needs to be a let since its value will change
+
+  switch (difficulty) {
+    case 'hard':
+      attempts = 375;  // More cells are cleared
+      break;
+    case 'medium':
+      attempts = 313;
+      break;
+    case 'easy':
+    default:
+      attempts = 250;  // Fewer cells are cleared
+      break;
+  }
+
+  while (attempts > 0) {
+    const row = Math.floor(Math.random() * 25);
+    const col = Math.floor(Math.random() * 25);
+    if (newGrid[row][col] !== null) {
+      newGrid[row][col] = null;
+      attempts--;  // Properly decrement attempts
+    }
+  }
+  return newGrid;
+};
+
 
 export const Screen8 = () => {
   const navigate = useNavigate();
 
-  // Initialize a 25x25 grid state
+  // State to track the current grid and the selected cell
   const [grid, setGrid] = useState(
     Array.from({ length: 25 }, () => Array(25).fill(""))
   );
+  const [selectedCell, setSelectedCell] = useState({ row: null, col: null });
+  const [difficulty, setDifficulty] = useState("easy");
+
+  useEffect(() => {
+    const fullGrid = generateSudokuBoard();
+    const attempts = difficulty === "hard" ? 450 : difficulty === "medium" ? 400 : 350; // Adjust the number based on difficulty
+    const puzzleGrid = removeNumbers(fullGrid, attempts);
+    setGrid(puzzleGrid);
+  }, [difficulty]);
+
+
+  // Check if a move is valid according to Sudoku rules
+  const isValidMove = (grid, row, col, value) => {
+    for (let x = 0; x < 25; x++) {
+      if (grid[row][x] === value || grid[x][col] === value) return false;
+    }
+    const startRow = Math.floor(row / 5) * 5;
+    const startCol = Math.floor(col / 5) * 5;
+    for (let i = 0; i < 5; i++) {
+      for (let j = 0; j < 5; j++) {
+        if (grid[startRow + i][startCol + j] === value) return false;
+      }
+    }
+    return true;
+  };
+
+  // Handle input change in the grid
+  const handleInputChange = (rowIndex, colIndex, value) => {
+    if (value.match(/^[1-9a-yA-Y]?$|^$/)) {
+      const newValue = value.toUpperCase();
+      if (newValue && !isValidMove(grid, rowIndex, colIndex, newValue)) {
+        alert("Invalid move! This number conflicts with Sudoku rules.");
+      } else {
+        const newGrid = grid.map((row, rIndex) =>
+          row.map((cell, cIndex) =>
+            rIndex === rowIndex && cIndex === colIndex ? newValue : cell
+          )
+        );
+        setGrid(newGrid);
+      }
+    }
+  };
 
   const handleNewGameClick = () => {
     navigate("/page-5");
-  };
-
-  const handleInputChange = (rowIndex, colIndex, value) => {
-    if (value.match(/^[1-9a-yA-Y]?$|^$/)) {
-      // Allow values 1-9, A-Y for 25x25 grid
-      const newGrid = grid.map((row, rIndex) =>
-        row.map((cell, cIndex) =>
-          rIndex === rowIndex && cIndex === colIndex ? value : cell
-        )
-      );
-      setGrid(newGrid);
-    }
   };
 
   return (
@@ -31,6 +144,7 @@ export const Screen8 = () => {
       <div className="page-6">
         {/* <div className="text-wrapper-57">Difficulty: Medium</div> */}
         <div className="text-wrapper-58">Sudoku 25 x 25</div>
+       
         <div className="screen8-sudoku-grid">
           {grid.map((row, rowIndex) => (
             <div className="screen8-sudoku-row" key={rowIndex}>
@@ -40,7 +154,8 @@ export const Screen8 = () => {
                   className="screen8-sudoku-cell"
                   type="text"
                   maxLength={1}
-                  value={cell}
+                  value={cell || ""}
+                  onClick={() => setSelectedCell({ row: rowIndex, col: colIndex })}
                   onChange={(e) =>
                     handleInputChange(
                       rowIndex,
@@ -48,11 +163,13 @@ export const Screen8 = () => {
                       e.target.value.toUpperCase()
                     )
                   }
+                  readOnly={cell !== null && cell !== ""}
                 />
               ))}
             </div>
           ))}
         </div>
+       
         <div className="div-6">
           <div className="div-6">
             <div className="overlap-group-13">
@@ -117,136 +234,28 @@ export const Screen8 = () => {
           </div>
         </div>
         <div className="frame-24">
+          <p>Select Difficulty</p>
+        <select value={difficulty} onChange={(e) => setDifficulty(e.target.value)} className="difficulty-select">
+          <option value="easy">Easy</option>
+          <option value="medium">Medium</option>
+          <option value="hard">Hard</option>
+        </select>
           <div className="group-59">
-            <div className="group-60">
-              <div className="overlap-group-15">
-                <div className="text-wrapper-66">1</div>
-              </div>
-            </div>
-            <div className="group-61">
-              <div className="overlap-group-15">
-                <div className="text-wrapper-67">2</div>
-              </div>
-            </div>
-            <div className="group-62">
-              <div className="overlap-group-15">
-                <div className="text-wrapper-68">9</div>
-              </div>
-            </div>
-            <div className="group-63">
-              <div className="overlap-group-15">
-                <div className="text-wrapper-69">5</div>
-              </div>
-            </div>
-            <div className="group-64">
-              <div className="overlap-group-15">
-                <div className="text-wrapper-68">6</div>
-              </div>
-            </div>
-            <div className="group-65">
-              <div className="group-66">
-                <div className="overlap-group-15">
-                  <div className="text-wrapper-70">10</div>
-                </div>
-              </div>
-            </div>
-            <div className="group-67">
-              <div className="overlap-group-15">
-                <div className="rectangle-8" />
-                <div className="text-wrapper-71">13</div>
-              </div>
-            </div>
-            <div className="group-68">
-              <div className="overlap-group-15">
-                <div className="text-wrapper-66">3</div>
-              </div>
-            </div>
-            <div className="group-69">
-              <div className="overlap-group-15">
-                <div className="text-wrapper-72">4</div>
-              </div>
-            </div>
-            <div className="group-70">
-              <div className="overlap-group-15">
-                <div className="text-wrapper-73">11</div>
-              </div>
-            </div>
-            <div className="group-71">
-              <div className="overlap-group-15">
-                <div className="text-wrapper-69">7</div>
-              </div>
-            </div>
-            <div className="group-72">
-              <div className="overlap-group-15">
-                <div className="text-wrapper-68">8</div>
-              </div>
-            </div>
-            <div className="group-73">
-              <div className="overlap-group-15">
-                <div className="text-wrapper-70">12</div>
-              </div>
-            </div>
-            <div className="group-74">
-              <div className="overlap-group-15">
-                <div className="rectangle-8" />
-                <div className="text-wrapper-74">15</div>
-              </div>
-            </div>
-            <div className="group-75">
-              <div className="overlap-group-15">
-                <div className="text-wrapper-74">16</div>
-              </div>
-            </div>
-            <div className="group-76">
-              <div className="overlap-group-15">
-                <div className="text-wrapper-75">14</div>
-              </div>
-            </div>
-            <div className="group-77">
-              <div className="overlap-group-15">
-                <div className="text-wrapper-74">17</div>
-              </div>
-            </div>
-            <div className="group-78">
-              <div className="overlap-group-15">
-                <div className="text-wrapper-74">18</div>
-              </div>
-            </div>
-            <div className="group-79">
-              <div className="overlap-group-15">
-                <div className="text-wrapper-74">19</div>
-              </div>
-            </div>
-            <div className="group-80">
-              <div className="overlap-group-15">
-                <div className="text-wrapper-76">20</div>
-              </div>
-            </div>
-            <div className="group-81">
-              <div className="overlap-group-15">
-                <div className="text-wrapper-77">21</div>
-              </div>
-            </div>
-            <div className="group-82">
-              <div className="overlap-group-15">
-                <div className="text-wrapper-78">22</div>
-              </div>
-            </div>
-            <div className="group-83">
-              <div className="overlap-group-15">
-                <div className="text-wrapper-79">23</div>
-              </div>
-            </div>
-            <div className="group-84">
-              <div className="overlap-group-15">
-                <div className="text-wrapper-80">24</div>
-              </div>
-            </div>
-            <div className="group-85">
-              <div className="overlap-group-15">
-                <div className="text-wrapper-81">25</div>
-              </div>
-            </div>
+            {/* Number buttons for input */}
+            {[
+              "1", "2", "3", "4", "5", "6", "7", "8", "9",
+              "A", "B", "C", "D", "E", "F", "G", "H", "I", "J",
+              "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T",
+              "U", "V", "W", "X", "Y"
+            ].map((number) => (
+              <button
+                key={number}
+                className="number-button"
+                onClick={() => handleInputChange(selectedCell.row, selectedCell.col, number)}
+              >
+                {number}
+              </button>
+            ))}
           </div>
         </div>
         <div className="frame-25">
