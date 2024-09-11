@@ -234,7 +234,7 @@ export const Screen8 = () => {
           </div>
         </div>
         <div className="frame-24">
-          <p>Select Difficulty</p>
+          <p>Select Difficulty</p><br/>
         <select value={difficulty} onChange={(e) => setDifficulty(e.target.value)} className="difficulty-select">
           <option value="easy">Easy</option>
           <option value="medium">Medium</option>
