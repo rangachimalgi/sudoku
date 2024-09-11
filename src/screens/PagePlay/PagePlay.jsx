@@ -84,6 +84,7 @@ const isValidMove = (grid, row, col, num) => {
 export const PagePlay = () => {
   const navigate = useNavigate();
   const [grid, setGrid] = useState([]);
+  const [initialGrid, setInitialGrid] = useState([]); // Store the original puzzle grid
   const [selectedCell, setSelectedCell] = useState({ row: null, col: null });
   const [difficulty, setDifficulty] = useState("easy");
 
@@ -91,6 +92,7 @@ export const PagePlay = () => {
     const fullGrid = generateSudokuBoard();
     const puzzleGrid = removeNumbers(fullGrid, difficulty);
     setGrid(puzzleGrid);
+    setInitialGrid(puzzleGrid); // Store the initial grid for resetting
   }, [difficulty]); // Re-generate when difficulty changes
 
   const handleGridClick = () => {
@@ -119,6 +121,10 @@ export const PagePlay = () => {
     }
   };
 
+  const handleResetClick = () => {
+    setGrid(initialGrid); // Reset the grid to the initial puzzle
+  };
+
   const renderGrid = () => {
     return grid.map((row, rowIndex) => (
       <div key={rowIndex} className="sudoku-row">
@@ -133,12 +139,13 @@ export const PagePlay = () => {
               handleInputChange(rowIndex, colIndex, e.target.value)
             }
             onClick={() => setSelectedCell({ row: rowIndex, col: colIndex })}
-            readOnly={cell !== null} // Pre-filled cells are read-only
+            readOnly={initialGrid[rowIndex][colIndex] !== null} // Pre-filled cells are read-only
           />
         ))}
       </div>
     ));
   };
+
   const handleNumberClick = (number) => {
     if (selectedCell.row !== null && selectedCell.col !== null) {
       if (isValidMove(grid, selectedCell.row, selectedCell.col, number)) {
@@ -184,11 +191,11 @@ export const PagePlay = () => {
 
         <div className="group-9">
           <p>Select Difficulty</p> <br/>
-        <select value={difficulty} onChange={(e) => setDifficulty(e.target.value)} className="difficulty-select">
-          <option value="easy">Easy</option>
-          <option value="medium">Medium</option>
-          <option value="hard">Hard</option>
-        </select>
+          <select value={difficulty} onChange={(e) => setDifficulty(e.target.value)} className="difficulty-select">
+            <option value="easy">Easy</option>
+            <option value="medium">Medium</option>
+            <option value="hard">Hard</option>
+          </select>
           <div className="overlap-6">
             {/* Number buttons */}
             <div className="number-buttons">
@@ -257,7 +264,6 @@ export const PagePlay = () => {
               <div className="tab-6" onClick={handleNewGameClick}>
                 New Game
               </div>{" "}
-              {/* Add onClick handler */}
               <div className="tab-6">Rules</div>
               <div className="tab-6">Tips</div>
             </div>
@@ -275,7 +281,7 @@ export const PagePlay = () => {
           <img className="vector-5" alt="Vector" src="/img/vector-2.svg" />
         </div>
         <div className="group-24">
-          <div className="text-wrapper-29">Reset</div>
+          <div className="text-wrapper-29" onClick={handleResetClick}>Reset</div>
           <img className="vector-6" alt="Vector" src="/img/vector-2.svg" />
         </div>
         <div className="group-25">

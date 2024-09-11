@@ -96,12 +96,18 @@ export const Screen7 = () => {
   );
   const [selectedCell, setSelectedCell] = useState({ row: null, col: null });
   const [difficulty, setDifficulty] = useState("easy");
+  const [initialGrid, setInitialGrid] = useState([]); // Store the original puzzle grid
 
   useEffect(() => {
     const fullGrid = generateSudokuBoard();
     const puzzleGrid = removeNumbers(fullGrid, difficulty);
     setGrid(puzzleGrid);
+    setInitialGrid(puzzleGrid); // Store the initial puzzle grid for resetting
   }, [difficulty]);
+
+  const handleResetClick = () => {
+    setGrid(initialGrid); // Reset the current grid to the original puzzle
+  };
 
   // Check if a move is valid according to Sudoku rules
   const isValidMove = (grid, row, col, value) => {
@@ -256,12 +262,17 @@ export const Screen7 = () => {
           </div>
         </div>
         <div className="frame-20">
-          <p>Select Difficulty</p><br/>
-        <select value={difficulty} onChange={(e) => setDifficulty(e.target.value)} className="difficulty-select">
-          <option value="easy">Easy</option>
-          <option value="medium">Medium</option>
-          <option value="hard">Hard</option>
-        </select>
+          <p>Select Difficulty</p>
+          <br />
+          <select
+            value={difficulty}
+            onChange={(e) => setDifficulty(e.target.value)}
+            className="difficulty-select"
+          >
+            <option value="easy">Easy</option>
+            <option value="medium">Medium</option>
+            <option value="hard">Hard</option>
+          </select>
           {/* <img className="group-49" alt="Group" src="/img/group-30.png" /> */}
           <div className="button-box">
             {[
@@ -317,10 +328,11 @@ export const Screen7 = () => {
             <div className="text-wrapper-56">Restart</div>
             <img className="vector-13" alt="Vector" src="/img/vector-2.svg" />
           </div>
-          <div className="group-52">
+          <div className="group-52" onClick={handleResetClick}>
             <div className="text-wrapper-56">Reset</div>
             <img className="vector-14" alt="Vector" src="/img/vector-2.svg" />
           </div>
+
           <div className="group-53">
             <div className="text-wrapper-56">Save</div>
           </div>

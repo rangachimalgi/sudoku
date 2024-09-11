@@ -94,14 +94,18 @@ export const Screen8 = () => {
   );
   const [selectedCell, setSelectedCell] = useState({ row: null, col: null });
   const [difficulty, setDifficulty] = useState("easy");
+  const [initialGrid, setInitialGrid] = useState([]); // Store the original puzzle grid
 
   useEffect(() => {
     const fullGrid = generateSudokuBoard();
-    const attempts = difficulty === "hard" ? 450 : difficulty === "medium" ? 400 : 350; // Adjust the number based on difficulty
-    const puzzleGrid = removeNumbers(fullGrid, attempts);
+    const puzzleGrid = removeNumbers(fullGrid, difficulty);
     setGrid(puzzleGrid);
+    setInitialGrid(puzzleGrid); // Store the initial puzzle grid for resetting
   }, [difficulty]);
 
+  const handleResetClick = () => {
+    setGrid(initialGrid); // Reset the current grid to the original puzzle
+  };  
 
   // Check if a move is valid according to Sudoku rules
   const isValidMove = (grid, row, col, value) => {
@@ -282,7 +286,7 @@ export const Screen8 = () => {
             <div className="text-wrapper-83">Restart</div>
             <img className="vector-17" alt="Vector" src="/img/vector-2.svg" />
           </div>
-          <div className="group-88">
+          <div className="group-88" onClick={handleResetClick}>
             <div className="text-wrapper-83">Reset</div>
             <img className="vector-18" alt="Vector" src="/img/vector-2.svg" />
           </div>
