@@ -162,6 +162,14 @@ export const Screen7 = () => {
     navigate("/page-5");
   };
 
+  const handleRestartClick = () => {
+    const fullGrid = generateSudokuBoard(); // Generate a new full Sudoku grid
+    const puzzleGrid = removeNumbers(fullGrid, difficulty); // Remove numbers based on difficulty
+    setGrid(puzzleGrid); // Set the new grid
+    setInitialGrid(puzzleGrid); // Store the new grid as the initial grid for reset functionality
+  };
+  
+
   return (
     <div className="screen-7">
       <div className="page-5">
@@ -325,7 +333,7 @@ export const Screen7 = () => {
             </div>
           </div>
           <div className="group-51">
-            <div className="text-wrapper-56">Restart</div>
+            <div className="text-wrapper-56" onClick={handleRestartClick}>Restart</div>
             <img className="vector-13" alt="Vector" src="/img/vector-2.svg" />
           </div>
           <div className="group-52" onClick={handleResetClick}>
