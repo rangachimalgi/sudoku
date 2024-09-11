@@ -601,3 +601,36 @@
 .screen7-sudoku-cell:nth-child(4n+1) {
   border-left: 2px solid #000; /* Thicker left border every 4 cells */
 }
+
+.button-box {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 30px;  /* Padding inside the box */
+  margin: 30px auto;  /* Margin around the box to center it */
+  width: 400px;  /* Fixed width for the box */
+  height: 250px;  /* Fixed height for the box */
+  background-color: #f2f2f2;  /* Background color for the box */
+  border-radius: 10px;  /* Rounded corners */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);  /* Drop shadow for depth */
+}
+
+.number-button {
+  padding: 10px 20px;  /* Padding inside each button */
+  margin: 5px;  /* Space between buttons */
+  width: 45px;  /* Fixed width for each button */
+  height: 45px;  /* Fixed height for each button */
+  background-color: #3d3e3f;  /* Button color */
+  color: white;  /* Text color */
+  font-size: 16px;  /* Text size */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+
+  &:hover {
+    background-color: #798ca1;  /* Darker blue on hover */
+    transform: scale(1.1);  /* Slightly enlarge on hover */
+  }
+}
+
