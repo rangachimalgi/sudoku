@@ -11,7 +11,7 @@ export const Screen3 = () => {
 
   const handleGetStartedClick = () => {
     // Navigate to page-4 when the button is clicked
-    navigate("/page-4");
+    navigate("/page-5");
   };
 
   return (

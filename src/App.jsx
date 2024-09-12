@@ -14,7 +14,7 @@ import { Rules } from "./screens/Modal";
 const router = createBrowserRouter([
   {
     path: "/*",
-    element: <PageScreen />,
+    element: <Screen3 />,
   },
   {
     path: "/page-1",
