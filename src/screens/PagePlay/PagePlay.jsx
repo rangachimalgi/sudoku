@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./PagePlaystyle.css";
+import { Modal } from "../Modal";
 
 // Function to generate a valid Sudoku board
 const generateSudokuBoard = () => {
@@ -89,6 +90,7 @@ export const PagePlay = () => {
   const [difficulty, setDifficulty] = useState("easy");
   const [history, setHistory] = useState([]); // Stores grid states for undo/redo
   const [currentStep, setCurrentStep] = useState(0); // Tracks current position in the history
+  const [showRules, setShowRules] = useState(false); // For displaying the rules modal
 
   useEffect(() => {
     const fullGrid = generateSudokuBoard();
@@ -129,6 +131,10 @@ export const PagePlay = () => {
 
   const handleResetClick = () => {
     setGrid(initialGrid); // Reset the grid to the initial puzzle
+  };
+
+  const handleToggleRules = () => {
+    setShowRules(!showRules); // Toggle the modal's visibility
   };
 
   const renderGrid = () => {
@@ -186,7 +192,7 @@ export const PagePlay = () => {
       setGrid(history[currentStep + 1]); // Set the next grid state
     }
   };
-  
+
   // Navigate to /page-5 on "New Game" click
   const handleNewGameClick = () => {
     navigate("/page-5");
@@ -216,6 +222,26 @@ export const PagePlay = () => {
 
         {/* Sudoku Grid */}
         <div className="sudoku-grid">{renderGrid()}</div>
+        {/* Modal for Sudoku Rules */}
+        <Modal show={showRules} handleClose={handleToggleRules}>
+          <h2>Sudoku Rules</h2>
+          <ul>
+            <li>
+              Each row must contain the numbers 1 to 9 without repetition.
+            </li>
+            <li>
+              Each column must contain the numbers 1 to 9 without repetition.
+            </li>
+            <li>
+              Each 3x3 sub-grid must contain the numbers 1 to 9 without
+              repetition.
+            </li>
+            <li>
+              The puzzle is solved when all cells are correctly filled according
+              to these rules.
+            </li>
+          </ul>
+        </Modal>
 
         <div className="group-9">
           <p>Select Difficulty</p> <br />
@@ -296,7 +322,11 @@ export const PagePlay = () => {
               <div className="tab-6" onClick={handleNewGameClick}>
                 New Game
               </div>{" "}
-              <div className="tab-6">Rules</div>
+              <div className="tab-6" onClick={handleToggleRules}>
+                {" "}
+                {/* Toggle modal on click */}
+                Rules
+              </div>{" "}
               <div className="tab-6">Tips</div>
             </div>
           </div>

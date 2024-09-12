@@ -9,6 +9,7 @@ import { PagePlay } from "./screens/PagePlay";
 import { PagePause } from "./screens/PagePause";
 import { Screen7 } from "./screens/Screen7";
 import { Screen8 } from "./screens/Screen8";
+import { Rules } from "./screens/Modal";
 
 const router = createBrowserRouter([
   {

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./ScreenSevenStyles.css";
+import { Modal } from "../Modal";
 
 // Function to generate a valid 16x16 Sudoku board
 const generateSudokuBoard = () => {
@@ -99,6 +100,7 @@ export const Screen7 = () => {
   const [initialGrid, setInitialGrid] = useState([]); // Store the original puzzle grid
   const [history, setHistory] = useState([]); // Stores grid states for undo/redo
   const [currentStep, setCurrentStep] = useState(0); // Tracks current position in the history
+  const [showRules, setShowRules] = useState(false); // For displaying the rules modal
 
   useEffect(() => {
     const fullGrid = generateSudokuBoard();
@@ -185,7 +187,10 @@ export const Screen7 = () => {
       setGrid(history[currentStep + 1]); // Set the grid to the next state
     }
   };
-  
+
+  const handleToggleRules = () => {
+    setShowRules(!showRules); // Toggle the modal's visibility
+  };
 
   // Navigate to /page-5 on "New Game" click
   const handleNewGameClick = () => {
@@ -247,7 +252,33 @@ export const Screen7 = () => {
             <div className="tab-8" onClick={handleNewGameClick}>
               New Game
             </div>
-            <div className="tab-8">Rules</div>
+            {/* Modal for Sudoku Rules */}
+            <Modal show={showRules} handleClose={handleToggleRules}>
+              <h2>Sudoku Rules (16x16)</h2>
+              <ul>
+                <li>
+                  Each row must contain the numbers 1 to 9 and the letters A to
+                  G without repetition.
+                </li>
+                <li>
+                  Each column must contain the numbers 1 to 9 and the letters A
+                  to G without repetition.
+                </li>
+                <li>
+                  Each 4x4 sub-grid must contain the numbers 1 to 9 and the
+                  letters A to G without repetition.
+                </li>
+                <li>
+                  The puzzle is solved when all cells are correctly filled
+                  according to these rules.
+                </li>
+              </ul>
+            </Modal>
+            <div className="tab-8" onClick={handleToggleRules}>
+              {" "}
+              {/* Toggle modal on click */}
+              Rules
+            </div>{" "}
             <div className="tab-8">Tips</div>
           </div>
         </div>

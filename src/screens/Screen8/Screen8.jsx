@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./style.css";
+import { Modal } from "../Modal";
 
 // Function to generate a valid 25x25 Sudoku board
 const generateSudokuBoard = () => {
@@ -126,6 +127,7 @@ export const Screen8 = () => {
   const [initialGrid, setInitialGrid] = useState([]); // Store the original puzzle grid
   const [history, setHistory] = useState([]); // Stores grid states for undo/redo
   const [currentStep, setCurrentStep] = useState(0); // Tracks current position in the history
+  const [showRules, setShowRules] = useState(false); // For toggling rules modal
 
   useEffect(() => {
     // Generate a new Sudoku board based on difficulty
@@ -216,6 +218,10 @@ export const Screen8 = () => {
     setCurrentStep(0); // Reset step counter
   };
 
+  const handleToggleRules = () => {
+    setShowRules(!showRules); // Toggle the modal's visibility
+  };
+
   return (
     <div className="screen-8">
       <div className="page-6">
@@ -261,10 +267,34 @@ export const Screen8 = () => {
               New Game
             </div>{" "}
             {/* Add onClick handler */}
-            <div className="tab-9">Rules</div>
+            <div className="tab-9" onClick={handleToggleRules}>
+              Rules
+            </div>
             <div className="tab-9">Tips</div>
           </div>
         </div>
+        {/* Modal for displaying rules */}
+        <Modal show={showRules} handleClose={handleToggleRules}>
+          <h2>Sudoku Rules</h2>
+          <ul>
+            <li>
+              Each row must contain the numbers 1 to 25 (or A to Y) without
+              repetition.
+            </li>
+            <li>
+              Each column must contain the numbers 1 to 25 (or A to Y) without
+              repetition.
+            </li>
+            <li>
+              Each 5x5 sub-grid must contain the numbers 1 to 25 (or A to Y)
+              without repetition.
+            </li>
+            <li>
+              The game is solved when every cell is correctly filled according
+              to these rules.
+            </li>
+          </ul>
+        </Modal>
         <div className="frame-23">
           <div className="group-54">
             <div className="overlap-25">
