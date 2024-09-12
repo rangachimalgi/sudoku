@@ -203,6 +203,28 @@ export const PagePlay = () => {
     navigate("/page-5");
   };
 
+  const handleEraseClick = () => {
+    if (selectedCell.row !== null && selectedCell.col !== null) {
+      // Check if the cell is editable (not part of the initial grid)
+      if (initialGrid[selectedCell.row][selectedCell.col] === null) {
+        const newGrid = grid.map((row, i) =>
+          row.map((cell, j) =>
+            i === selectedCell.row && j === selectedCell.col ? null : cell
+          )
+        );
+        // Update history
+        const newHistory = history.slice(0, currentStep + 1); // Remove any "future" states
+        setHistory([...newHistory, newGrid]);
+        setCurrentStep(newHistory.length); // Update the current step
+        setGrid(newGrid); // Set the new grid
+      } else {
+        alert("You cannot erase a pre-filled cell.");
+      }
+    } else {
+      alert("Please select a cell first!");
+    }
+  };
+
   const handleRestartClick = () => {
     const fullGrid = generateSudokuBoard(); // Generate a new full Sudoku grid
     const puzzleGrid = removeNumbers(fullGrid, difficulty); // Remove numbers based on difficulty
@@ -253,12 +275,29 @@ export const PagePlay = () => {
         <Modal show={showTips} handleClose={handleToggleTips}>
           <h2>Sudoku Tips</h2>
           <ul>
-            <li>Start with easy clues: Look for rows, columns, or grids with only a few missing numbers.</li>
-            <li>Use the process of elimination: If a number can only fit in one place, put it there.</li>
-            <li>Work systematically: Solve for one number at a time across the grid.</li>
-            <li>Use pencil marks: Write down possible numbers in each empty cell.</li>
-            <li>Look for naked pairs: Two cells in a row, column, or block that can only be two numbers.</li>
-            <li>Stay patient: Sudoku is a logic puzzle, so take your time and think each move through.</li>
+            <li>
+              Start with easy clues: Look for rows, columns, or grids with only
+              a few missing numbers.
+            </li>
+            <li>
+              Use the process of elimination: If a number can only fit in one
+              place, put it there.
+            </li>
+            <li>
+              Work systematically: Solve for one number at a time across the
+              grid.
+            </li>
+            <li>
+              Use pencil marks: Write down possible numbers in each empty cell.
+            </li>
+            <li>
+              Look for naked pairs: Two cells in a row, column, or block that
+              can only be two numbers.
+            </li>
+            <li>
+              Stay patient: Sudoku is a logic puzzle, so take your time and
+              think each move through.
+            </li>
           </ul>
         </Modal>
 
@@ -288,10 +327,11 @@ export const PagePlay = () => {
             </div>
 
             {/* Additional controls */}
-            <div className="noun-erase">
+            <div className="noun-erase" onClick={handleEraseClick}>
               <img className="vector-3" alt="Vector" src="/img/vector.svg" />
               <div className="text-wrapper-21">Erase</div>
             </div>
+
             <div className="noun-notes">
               <div className="overlap-8">
                 <img

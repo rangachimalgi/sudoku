@@ -202,6 +202,29 @@ export const Screen7 = () => {
     navigate("/page-5");
   };
 
+  const handleEraseClick = () => {
+    if (selectedCell.row !== null && selectedCell.col !== null) {
+      // Check if the cell is editable (not part of the initial grid)
+      if (initialGrid[selectedCell.row][selectedCell.col] === null) {
+        const newGrid = grid.map((row, i) =>
+          row.map((cell, j) =>
+            i === selectedCell.row && j === selectedCell.col ? null : cell
+          )
+        );
+        // Update history
+        const newHistory = history.slice(0, currentStep + 1); // Remove any "future" states
+        setHistory([...newHistory, newGrid]);
+        setCurrentStep(newHistory.length); // Update the current step
+        setGrid(newGrid); // Set the new grid
+      } else {
+        alert("You cannot erase a pre-filled cell.");
+      }
+    } else {
+      alert("Please select a cell first!");
+    }
+  };
+
+
   const handleRestartClick = () => {
     const fullGrid = generateSudokuBoard(); // Generate a new full Sudoku grid
     const puzzleGrid = removeNumbers(fullGrid, difficulty); // Remove numbers based on difficulty
@@ -333,7 +356,7 @@ export const Screen7 = () => {
         <div className="frame-19">
           <div className="group-44">
             <div className="overlap-21">
-              <div className="noun-erase-3">
+              <div className="noun-erase-3" onClick={handleEraseClick}>
                 <img className="vector-11" alt="Vector" src="/img/vector.svg" />
                 <div className="text-wrapper-49">Erase</div>
               </div>
