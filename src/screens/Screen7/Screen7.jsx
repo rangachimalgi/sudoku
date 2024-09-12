@@ -101,6 +101,7 @@ export const Screen7 = () => {
   const [history, setHistory] = useState([]); // Stores grid states for undo/redo
   const [currentStep, setCurrentStep] = useState(0); // Tracks current position in the history
   const [showRules, setShowRules] = useState(false); // For displaying the rules modal
+  const [showTips, setShowTips] = useState(false); // For displaying the tips modal
 
   useEffect(() => {
     const fullGrid = generateSudokuBoard();
@@ -192,6 +193,10 @@ export const Screen7 = () => {
     setShowRules(!showRules); // Toggle the modal's visibility
   };
 
+  const handleToggleTips = () => {
+    setShowTips(!showTips); // Toggle the modal's visibility for tips
+  };
+
   // Navigate to /page-5 on "New Game" click
   const handleNewGameClick = () => {
     navigate("/page-5");
@@ -274,12 +279,55 @@ export const Screen7 = () => {
                 </li>
               </ul>
             </Modal>
+            {/* Modal for Sudoku Tips */}
+            <Modal show={showTips} handleClose={handleToggleTips}>
+              <h2>Sudoku Tips (16x16)</h2>
+              <ul>
+                <li>
+                  **Look for obvious placements**: Start by identifying numbers
+                  that are missing in rows, columns, or grids that have only a
+                  few empty cells.
+                </li>
+                <li>
+                  **Eliminate options in 4x4 sub-grids**: Focus on one sub-grid
+                  at a time. Cross-reference which numbers are already in the
+                  sub-grid, row, and column.
+                </li>
+                <li>
+                  **Use pencil marks**: Write possible candidates for each cell,
+                  eliminating them as you find correct placements.
+                </li>
+                <li>
+                  **Find unique candidates**: In a 4x4 sub-grid, look for cells
+                  that can only contain a single number. This will help you lock
+                  in numbers quickly.
+                </li>
+                <li>
+                  **Look for pairs or triples**: Sometimes, two or three cells
+                  in a row or block can only contain a certain group of numbers.
+                  If they share the same candidates, it helps you eliminate
+                  those numbers from other cells in that area.
+                </li>
+                <li>
+                  **Be systematic**: Focus on one region of the grid,
+                  alternating between rows, columns, and sub-grids. This keeps
+                  your logic clean and organized.
+                </li>
+                <li>
+                  **Stay patient and logical**: 16x16 Sudoku puzzles are larger,
+                  so take your time. Carefully think through your moves,
+                  especially when fewer cells remain.
+                </li>
+              </ul>
+            </Modal>
             <div className="tab-8" onClick={handleToggleRules}>
               {" "}
               {/* Toggle modal on click */}
               Rules
             </div>{" "}
-            <div className="tab-8">Tips</div>
+            <div className="tab-8" onClick={handleToggleTips}>
+              Tips
+            </div>
           </div>
         </div>
         <div className="frame-19">

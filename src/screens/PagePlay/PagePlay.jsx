@@ -91,6 +91,7 @@ export const PagePlay = () => {
   const [history, setHistory] = useState([]); // Stores grid states for undo/redo
   const [currentStep, setCurrentStep] = useState(0); // Tracks current position in the history
   const [showRules, setShowRules] = useState(false); // For displaying the rules modal
+  const [showTips, setShowTips] = useState(false); // For displaying the tips modal
 
   useEffect(() => {
     const fullGrid = generateSudokuBoard();
@@ -134,7 +135,11 @@ export const PagePlay = () => {
   };
 
   const handleToggleRules = () => {
-    setShowRules(!showRules); // Toggle the modal's visibility
+    setShowRules(!showRules); // Toggle the modal's visibility for rules
+  };
+
+  const handleToggleTips = () => {
+    setShowTips(!showTips); // Toggle the modal's visibility for tips
   };
 
   const renderGrid = () => {
@@ -222,6 +227,7 @@ export const PagePlay = () => {
 
         {/* Sudoku Grid */}
         <div className="sudoku-grid">{renderGrid()}</div>
+
         {/* Modal for Sudoku Rules */}
         <Modal show={showRules} handleClose={handleToggleRules}>
           <h2>Sudoku Rules</h2>
@@ -240,6 +246,19 @@ export const PagePlay = () => {
               The puzzle is solved when all cells are correctly filled according
               to these rules.
             </li>
+          </ul>
+        </Modal>
+
+        {/* Modal for Sudoku Tips */}
+        <Modal show={showTips} handleClose={handleToggleTips}>
+          <h2>Sudoku Tips</h2>
+          <ul>
+            <li>Start with easy clues: Look for rows, columns, or grids with only a few missing numbers.</li>
+            <li>Use the process of elimination: If a number can only fit in one place, put it there.</li>
+            <li>Work systematically: Solve for one number at a time across the grid.</li>
+            <li>Use pencil marks: Write down possible numbers in each empty cell.</li>
+            <li>Look for naked pairs: Two cells in a row, column, or block that can only be two numbers.</li>
+            <li>Stay patient: Sudoku is a logic puzzle, so take your time and think each move through.</li>
           </ul>
         </Modal>
 
@@ -324,10 +343,12 @@ export const PagePlay = () => {
               </div>{" "}
               <div className="tab-6" onClick={handleToggleRules}>
                 {" "}
-                {/* Toggle modal on click */}
                 Rules
               </div>{" "}
-              <div className="tab-6">Tips</div>
+              <div className="tab-6" onClick={handleToggleTips}>
+                {" "}
+                Tips
+              </div>
             </div>
           </div>
         </div>

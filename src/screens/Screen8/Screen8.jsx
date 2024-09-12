@@ -128,6 +128,7 @@ export const Screen8 = () => {
   const [history, setHistory] = useState([]); // Stores grid states for undo/redo
   const [currentStep, setCurrentStep] = useState(0); // Tracks current position in the history
   const [showRules, setShowRules] = useState(false); // For toggling rules modal
+  const [showTips, setShowTips] = useState(false); // For displaying the tips modal
 
   useEffect(() => {
     // Generate a new Sudoku board based on difficulty
@@ -222,6 +223,10 @@ export const Screen8 = () => {
     setShowRules(!showRules); // Toggle the modal's visibility
   };
 
+  const handleToggleTips = () => {
+    setShowTips(!showTips); // Toggle the modal's visibility for tips
+  };
+
   return (
     <div className="screen-8">
       <div className="page-6">
@@ -270,7 +275,9 @@ export const Screen8 = () => {
             <div className="tab-9" onClick={handleToggleRules}>
               Rules
             </div>
-            <div className="tab-9">Tips</div>
+            <div className="tab-9" onClick={handleToggleTips}>
+              Tips
+            </div>
           </div>
         </div>
         {/* Modal for displaying rules */}
@@ -295,6 +302,48 @@ export const Screen8 = () => {
             </li>
           </ul>
         </Modal>
+        <Modal show={showTips} handleClose={handleToggleTips}>
+          <h2>Sudoku Tips (25x25)</h2>
+          <ul>
+            <li>
+              <strong>Start with the most obvious placements:</strong> Look for
+              rows, columns, or 5x5 sub-grids with only a few missing numbers.
+              Fill in the gaps by process of elimination.
+            </li>
+            <li>
+              <strong>Break it down:</strong> Focus on one 5x5 sub-grid at a
+              time, cross-checking rows and columns to see which numbers are
+              already placed and which are missing.
+            </li>
+            <li>
+              <strong>Use candidate marks:</strong> Given the size of a 25x25
+              grid, writing down possible candidates in empty cells will help
+              narrow down choices over time.
+            </li>
+            <li>
+              <strong>Look for unique candidates:</strong> In each row, column,
+              or sub-grid, check if there’s a number that can only fit in one
+              specific cell.
+            </li>
+            <li>
+              <strong>Spot patterns like naked pairs or triples:</strong>{" "}
+              Sometimes two or more cells in a row, column, or sub-grid can only
+              be certain numbers. Identifying these patterns helps eliminate
+              options elsewhere.
+            </li>
+            <li>
+              <strong>Be systematic:</strong> Given the size of the grid, work
+              through one row, column, or sub-grid at a time. Moving
+              systematically across the grid helps avoid confusion.
+            </li>
+            <li>
+              <strong>Take breaks and revisit:</strong> 25x25 grids are large
+              and complex. If you’re stuck, take a break and come back with
+              fresh eyes.
+            </li>
+          </ul>
+        </Modal>
+
         <div className="frame-23">
           <div className="group-54">
             <div className="overlap-25">
