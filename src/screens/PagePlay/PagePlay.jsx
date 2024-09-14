@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./PagePlaystyle.css";
 import { Modal } from "../Modal";
+import { Alert, AlertIcon, AlertTitle, AlertDescription, CloseButton } from "@chakra-ui/react"; 
 
 // Function to generate a valid Sudoku board
 const generateSudokuBoard = () => {
@@ -92,6 +93,7 @@ export const PagePlay = () => {
   const [currentStep, setCurrentStep] = useState(0); // Tracks current position in the history
   const [showRules, setShowRules] = useState(false); // For displaying the rules modal
   const [showTips, setShowTips] = useState(false); // For displaying the tips modal
+  const [error, setError] = useState(null); // State for error messages
 
   useEffect(() => {
     const fullGrid = generateSudokuBoard();
@@ -122,11 +124,12 @@ export const PagePlay = () => {
         setHistory([...newHistory, newGrid]);
         setCurrentStep(newHistory.length); // Update the current step
         setGrid(newGrid); // Set the new grid
+        setError(null); // Clear the error when the move is valid
       } else {
-        alert("Invalid move! This number conflicts with Sudoku rules.");
+        setError("Invalid move! This number conflicts with Sudoku rules.");
       }
     } else {
-      alert("Please enter a number between 1 and 9.");
+      setError("Please enter a number between 1 and 9.");
     }
   };
 
@@ -234,6 +237,14 @@ export const PagePlay = () => {
 
   return (
     <div className="page-play">
+      {error && (
+        <Alert status="error" mb={4}>
+          <AlertIcon />
+          <AlertTitle mr={2}>Invalid Move!</AlertTitle>
+          <AlertDescription>{error}</AlertDescription>
+          <CloseButton position="absolute" right="8px" top="8px" onClick={() => setError(null)} />
+        </Alert>
+      )}
       <div className="div-2">
         <div className="text-wrapper-14">Difficulty: Easy</div>
         <div className="overlap-5">
