@@ -6,17 +6,24 @@ export const Screen4 = () => {
   const navigate = useNavigate();
 
   const handleGridSizeClick = (size) => {
-    if (size === '9x9') {
+    if (size === "9x9") {
       navigate("/page-6-u40playu41");
-    } else if (size === '16x16') {
+    } else if (size === "16x16") {
       navigate("/page-8");
-    } else if (size === '25x25') {
-      navigate("/page-9")
-    }
-    else {
+    } else if (size === "25x25") {
+      navigate("/page-9");
+    } else {
       console.log(`${size} grid size selected`);
       // Handle other grid sizes if necessary
     }
+  };
+
+  const handleLogoutClick = () => {
+    // Remove the authentication token from local storage
+    localStorage.removeItem("token");
+
+    // Redirect to the login page
+    navigate("/page-3");
   };
 
   return (
@@ -25,7 +32,7 @@ export const Screen4 = () => {
         <div className="text-wrapper-9">Choose the grid size</div>
 
         {/* 9 x 9 Button */}
-        <div className="frame-7" onClick={() => handleGridSizeClick('9x9')}>
+        <div className="frame-7" onClick={() => handleGridSizeClick("9x9")}>
           <div className="group-7">
             <div className="overlap-group-5">
               <div className="text-wrapper-10">9 x 9</div>
@@ -34,7 +41,7 @@ export const Screen4 = () => {
         </div>
 
         {/* 16 x 16 Button */}
-        <div className="frame-8" onClick={() => handleGridSizeClick('16x16')}>
+        <div className="frame-8" onClick={() => handleGridSizeClick("16x16")}>
           <div className="group-7">
             <div className="overlap-group-5">
               <div className="text-wrapper-11">16 x 16</div>
@@ -43,7 +50,7 @@ export const Screen4 = () => {
         </div>
 
         {/* 25 x 25 Button */}
-        <div className="frame-9" onClick={() => handleGridSizeClick('25x25')}>
+        <div className="frame-9" onClick={() => handleGridSizeClick("25x25")}>
           <div className="group-7">
             <div className="overlap-group-5">
               <div className="text-wrapper-12">25 x 25</div>
@@ -56,8 +63,12 @@ export const Screen4 = () => {
             <div className="text-wrapper-13">MASTER SUDOKU</div>
             <img className="game-5" alt="Game" src="/img/game-1.png" />
             <div className="navigation-5">
-              <div className="tab-5">Home</div>
-              <div className="tab-5">Log Out</div>
+              <div className="tab-5" onClick={() => navigate("/page-3")}>
+                Home
+              </div>
+              <div className="tab-5" onClick={handleLogoutClick}>
+                Log Out
+              </div>
               <div className="tab-5">Profile</div>
             </div>
           </div>

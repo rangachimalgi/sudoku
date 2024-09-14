@@ -4,14 +4,61 @@ import "./style.css";
 
 export const Screen3 = () => {
   const [username, setUsername] = useState("");
+  const [email, setEmail] = useState(""); // Email field for sign-up
   const [password, setPassword] = useState("");
+  const [error, setError] = useState(null);
+  const [isSignup, setIsSignup] = useState(false); // Toggle between sign-in and sign-up
   
-  // Initialize navigate function from useNavigate
   const navigate = useNavigate();
 
-  const handleGetStartedClick = () => {
-    // Navigate to page-4 when the button is clicked
-    navigate("/page-5");
+  const handleGetStartedClick = async () => {
+    const data = {
+      username: username,
+      password: password,
+    };
+
+    if (isSignup) {
+      // If it's a signup, add the email and role (role is set to 'user' by default)
+      data.email = email;
+      data.role = ["user"]; // Default role is 'user'
+    }
+
+    try {
+      const endpoint = isSignup
+        ? "http://localhost:8080/api/auth/signup"
+        : "http://localhost:8080/api/auth/signin";
+
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        console.log(isSignup ? "Signup successful" : "Login successful", result);
+
+        if (!isSignup) {
+          // Store JWT token in local storage on login
+          localStorage.setItem("token", result.token);
+        }
+
+        // Navigate to the next page after success
+        navigate("/page-5");
+      } else {
+        const errorData = await response.json();
+        setError(errorData.message || (isSignup ? "Signup failed" : "Login failed"));
+      }
+    } catch (error) {
+      setError("An error occurred. Please try again.");
+    }
+  };
+
+  const toggleAuthMode = () => {
+    setIsSignup(!isSignup);
+    setError(null); // Clear any error message when switching modes
   };
 
   return (
@@ -39,22 +86,39 @@ export const Screen3 = () => {
           </div>
           <div className="section-3">
             <div className="container-7">
-              <p className="p">Sign up/Create your free account</p>
-              <p className="description-3">Please enter your username and password</p>
+              <p className="p">
+                {isSignup ? "Create your free account" : "Sign in to your account"}
+              </p>
+              <p className="description-3">
+                Please enter your {isSignup ? "email, " : ""}username and password
+              </p>
               
-              {/* Input for Email or Username */}
+              {error && <p style={{ color: "red" }}>{error}</p>}
+
+              {isSignup && (
+                <div className="input-2">
+                  <div className="title-16">Email</div>
+                  <input
+                    className="textfield-2"
+                    type="email"
+                    placeholder="Enter your email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                </div>
+              )}
+
               <div className="input-2">
-                <div className="title-16">Email or username</div>
+                <div className="title-16">Username</div>
                 <input
                   className="textfield-2"
                   type="text"
-                  placeholder="Enter your email or username"
+                  placeholder="Enter your username"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                 />
               </div>
 
-              {/* Input for Password */}
               <div className="input-2">
                 <div className="title-16">Password</div>
                 <input
@@ -66,12 +130,17 @@ export const Screen3 = () => {
                 />
               </div>
 
-              {/* Get Started Button */}
               <button className="primary-wrapper" onClick={handleGetStartedClick}>
                 <div className="primary-2">
-                  <div className="title-17">Get Started</div>
+                  <div className="title-17">{isSignup ? "Sign Up" : "Sign In"}</div>
                 </div>
               </button>
+
+              <p style={{ cursor: "pointer", color: "blue" }} onClick={toggleAuthMode}>
+                {isSignup
+                  ? "Already have an account? Sign In"
+                  : "Don't have an account? Sign Up"}
+              </p>
             </div>
             <img className="vector-2" alt="Vector" src="/img/vector-200-2.svg" />
           </div>
