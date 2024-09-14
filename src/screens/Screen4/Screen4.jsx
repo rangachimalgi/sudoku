@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import "./style.css";
+import "./style.css"; // Make sure your CSS file includes styling for buttons
 
 export const Screen4 = () => {
   const navigate = useNavigate();
@@ -14,15 +14,17 @@ export const Screen4 = () => {
       navigate("/page-9");
     } else {
       console.log(`${size} grid size selected`);
-      // Handle other grid sizes if necessary
     }
   };
 
-  const handleLogoutClick = () => {
-    // Remove the authentication token from local storage
-    localStorage.removeItem("token");
+  const handleHomeClick = () => {
+    navigate("/page-3"); // Redirect to the Home page
+  };
 
-    // Redirect to the login page
+  const handleLogoutClick = () => {
+    // Clear any stored authentication tokens
+    localStorage.removeItem("token");
+    // Redirect to the login page after logout
     navigate("/page-3");
   };
 
@@ -63,13 +65,15 @@ export const Screen4 = () => {
             <div className="text-wrapper-13">MASTER SUDOKU</div>
             <img className="game-5" alt="Game" src="/img/game-1.png" />
             <div className="navigation-5">
-              <div className="tab-5" onClick={() => navigate("/page-3")}>
+              {/* Home Button */}
+              <button className="button" onClick={handleHomeClick}>
                 Home
-              </div>
-              <div className="tab-5" onClick={handleLogoutClick}>
+              </button>
+
+              {/* Log Out Button */}
+              <button className="button" onClick={handleLogoutClick}>
                 Log Out
-              </div>
-              <div className="tab-5">Profile</div>
+              </button>
             </div>
           </div>
         </div>

@@ -233,3 +233,36 @@
   text-align: center;
   width: 124px;
 }
+
+/* General hover style for frame elements */
+.frame-7, .frame-8, .frame-9 {
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.frame-7:hover, .frame-8:hover, .frame-9:hover {
+  background-color: #f0f0f0; /* Change background color on hover */
+  transform: scale(1.05); /* Slightly increase size on hover */
+  cursor: pointer; /* Change to pointer cursor */
+}
+
+.text-wrapper-10:hover, .text-wrapper-11:hover, .text-wrapper-12:hover {
+  color: #2b8cac; /* Change text color on hover */
+}
+
+.button {
+  background-color: #14213D; /* Green */
+  border: none;
+  color: rgb(255, 255, 255);
+  padding: 11px 40px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.button:hover {
+  background-color: #61a5ac;
+}
