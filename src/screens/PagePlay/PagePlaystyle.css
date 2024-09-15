@@ -697,27 +697,43 @@
 .sudoku-grid {
   display: grid;
   grid-template-columns: repeat(9, 1fr); /* 9 columns */
-  gap: 1px;
-  max-width: 504px; /* 9 * 56px */
-  margin: 0 auto;
-  position: absolute;
-  left: 150px;
-  top: 250px;
-  border: 2px solid #000; /* Outer border */
+  gap: 2px; /* Small gap between cells, adjust if needed */
+  width: max-content; /* Adjust based on the total width you want */
+  right: 300px;
+  margin: 50px auto; /* Increase margin to push it down slightly, centers horizontally */
+  border: 2px solid #000; /* Bold border around the entire grid */
+  position: relative; /* Use relative for slight adjustments or absolute for more control */
+  top: 250px; /* Adjust this value to move it down relative to its current position */
+}
+
+.sudoku-row {
+  display: contents;
 }
 
 .sudoku-cell {
-  width: 56px;
-  height: 56px;
+  width: 50px;  /* Size of each cell */
+  height: 50px;
   text-align: center;
-  font-size: 24px;
-  border: 1px solid #000;
-  box-sizing: border-box;
-  background-color: #f0f0f0; /* Light background color for all cells */
+  font-size: 18px; /* Adjust font size as needed */
+  border: 1px solid #ccc; /* Lighter border for individual cells */
+  box-sizing: border-box; /* Ensures borders are included in width/height */
 }
 
-.sudoku-cell:nth-child(odd) {
-  background-color: #e6e6e6; /* Slightly darker color for alternating cells */
+/* Thicker borders for 3x3 sub-grids */
+.sudoku-cell:nth-child(3n) {
+  border-right: 2px solid #000; /* Thicker right border after every 3 cells */
+}
+
+.sudoku-row:nth-child(3n) .sudoku-cell {
+  border-bottom: 2px solid #000; /* Thicker bottom border after every 3 rows */
+}
+
+.sudoku-row:nth-child(3n+1) .sudoku-cell {
+  border-top: 2px solid #000; /* Thicker top border starting every new block row */
+}
+
+.sudoku-cell:nth-child(3n+1) {
+  border-left: 2px solid #000; /* Thicker left border starting every new block column */
 }
 
 .number-buttons {
