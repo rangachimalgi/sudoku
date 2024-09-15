@@ -2,7 +2,13 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./PagePlaystyle.css";
 import { Modal } from "../Modal";
-import { Alert, AlertIcon, AlertTitle, AlertDescription, CloseButton } from "@chakra-ui/react"; 
+import {
+  Alert,
+  AlertIcon,
+  AlertTitle,
+  AlertDescription,
+  CloseButton,
+} from "@chakra-ui/react";
 
 // Function to generate a valid Sudoku board
 const generateSudokuBoard = () => {
@@ -242,12 +248,19 @@ export const PagePlay = () => {
           <AlertIcon />
           <AlertTitle mr={2}>Invalid Move!</AlertTitle>
           <AlertDescription>{error}</AlertDescription>
-          <CloseButton position="absolute" right="8px" top="8px" onClick={() => setError(null)} />
+          <CloseButton
+            position="absolute"
+            right="8px"
+            top="8px"
+            onClick={() => setError(null)}
+          />
         </Alert>
       )}
       <div className="div-2">
-        <div className="text-wrapper-14">Difficulty: Easy</div>
-        <div className="overlap-5">
+        <div className="text-wrapper-14">
+          Difficulty: {difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}
+        </div>
+        {/* <div className="overlap-5">
           <div className="text-wrapper-15">03:56</div>
           <div className="ellipse" />
           <div className="rectangle-4" />
@@ -256,7 +269,7 @@ export const PagePlay = () => {
           <div className="rectangle-5" />
           <div className="ellipse-4" />
           <div className="ellipse-5" />
-        </div>
+        </div> */}
 
         {/* Sudoku Grid */}
         <div className="sudoku-grid">{renderGrid()}</div>
@@ -313,16 +326,22 @@ export const PagePlay = () => {
         </Modal>
 
         <div className="group-9">
-          <p>Select Difficulty</p> <br />
-          <select
-            value={difficulty}
-            onChange={(e) => setDifficulty(e.target.value)}
-            className="difficulty-select"
-          >
-            <option value="easy">Easy</option>
-            <option value="medium">Medium</option>
-            <option value="hard">Hard</option>
-          </select>
+          <div className="difficulty-container">
+            <label className="difficulty-label" htmlFor="difficulty">
+              Select Difficulty
+            </label>
+            <select
+              id="difficulty"
+              className="difficulty-select"
+              value={difficulty}
+              onChange={(e) => setDifficulty(e.target.value)}
+            >
+              <option value="easy">Easy</option>
+              <option value="medium">Medium</option>
+              <option value="hard">Hard</option>
+            </select>
+          </div>
+
           <div className="overlap-6">
             {/* Number buttons */}
             <div className="number-buttons">
@@ -338,13 +357,9 @@ export const PagePlay = () => {
             </div>
 
             {/* Additional controls */}
-            <div className="noun-erase" onClick={handleEraseClick}>
-              <img className="vector-3" alt="Vector" src="/img/vector.svg" />
-              <div className="text-wrapper-21">Erase</div>
-            </div>
 
             <div className="noun-notes">
-              <div className="overlap-8">
+              {/* <div className="overlap-8">
                 <img
                   className="vector-4"
                   alt="Vector"
@@ -356,9 +371,9 @@ export const PagePlay = () => {
                   </div>
                 </div>
                 <div className="text-wrapper-23">Notes</div>
-              </div>
+              </div> */}
             </div>
-            <div className="group-19">
+            {/* <div className="group-19">
               <div className="overlap-9">
                 <img
                   className="noun-hint"
@@ -367,19 +382,33 @@ export const PagePlay = () => {
                 />
                 <div className="text-wrapper-24">Hint</div>
               </div>
-            </div>
-            <div className="group-20">
-              <div className="overlap-10" onClick={handleUndoClick}>
-                <img className="img-2" alt="Undo" src="/img/undo.svg" />
-                <div className="text-wrapper-25">Undo</div>
-              </div>
-            </div>
-            <div className="group-21">
-              <div className="overlap-10" onClick={handleRedoClick}>
-                <img className="img-2" alt="Redo" src="/img/redo.svg" />
-                <div className="text-wrapper-26">Redo</div>
-              </div>
-            </div>
+            </div> */}
+            <div className="button-container">
+              <button className="erase-button" onClick={handleEraseClick}>
+                <img
+                  className="button-icon"
+                  src="/img/vector.svg"
+                  alt="Erase Icon"
+                />
+                <span>Erase</span>
+              </button>
+              <button className="undo-button" onClick={handleUndoClick}>
+                <img
+                  className="button-icon"
+                  src="/img/undo.svg"
+                  alt="Undo Icon"
+                />
+                <span>Undo</span>
+              </button>
+              <button className="redo-button" onClick={handleRedoClick}>
+                <img
+                  className="button-icon"
+                  src="/img/redo.svg"
+                  alt="Redo Icon"
+                />
+                <span>Redo</span>
+              </button>
+            </div>  
           </div>
         </div>
 
@@ -389,17 +418,15 @@ export const PagePlay = () => {
             <div className="text-wrapper-28">MASTER SUDOKU</div>
             <img className="game-6" alt="Game" src="/img/game-1.png" />
             <div className="navigation-6">
-              <div className="tab-6" onClick={handleNewGameClick}>
-                New Game
-              </div>{" "}
-              <div className="tab-6" onClick={handleToggleRules}>
-                {" "}
+              <button className="button-style" onClick={handleNewGameClick}>
+                New
+              </button>
+              <button className="button-style" onClick={handleToggleRules}>
                 Rules
-              </div>{" "}
-              <div className="tab-6" onClick={handleToggleTips}>
-                {" "}
+              </button>
+              <button className="button-style" onClick={handleToggleTips}>
                 Tips
-              </div>
+              </button>
             </div>
           </div>
         </div>
@@ -411,20 +438,21 @@ export const PagePlay = () => {
           </div>
         </div>
         <div className="group-23">
-          <div className="text-wrapper-29" onClick={handleRestartClick}>
+          <button className="button-style" onClick={handleRestartClick}>
             Restart
-          </div>
+          </button>
+
           <img className="vector-5" alt="Vector" src="/img/vector-2.svg" />
         </div>
         <div className="group-24">
-          <div className="text-wrapper-29" onClick={handleResetClick}>
+          <button className="button-style" onClick={handleResetClick}>
             Reset
-          </div>
+          </button>
           <img className="vector-6" alt="Vector" src="/img/vector-2.svg" />
         </div>
-        <div className="group-25">
+        {/* <div className="group-25">
           <div className="text-wrapper-29">Save</div>
-        </div>
+        </div> */}
       </div>
     </div>
   );
