@@ -2,13 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./PagePlaystyle.css";
 import { Modal } from "../Modal";
-import {
-  Alert,
-  AlertIcon,
-  AlertTitle,
-  AlertDescription,
-  CloseButton,
-} from "@chakra-ui/react";
 
 // Function to generate a valid Sudoku board
 const generateSudokuBoard = () => {
@@ -99,7 +92,6 @@ export const PagePlay = () => {
   const [currentStep, setCurrentStep] = useState(0); // Tracks current position in the history
   const [showRules, setShowRules] = useState(false); // For displaying the rules modal
   const [showTips, setShowTips] = useState(false); // For displaying the tips modal
-  const [error, setError] = useState(null); // State for error messages
 
   useEffect(() => {
     const fullGrid = generateSudokuBoard();
@@ -130,12 +122,11 @@ export const PagePlay = () => {
         setHistory([...newHistory, newGrid]);
         setCurrentStep(newHistory.length); // Update the current step
         setGrid(newGrid); // Set the new grid
-        setError(null); // Clear the error when the move is valid
       } else {
-        setError("Invalid move! This number conflicts with Sudoku rules.");
+        alert("Invalid move! This number conflicts with Sudoku rules."); // Basic browser alert
       }
     } else {
-      setError("Please enter a number between 1 and 9.");
+      alert("Please enter a number between 1 and 9."); // Basic browser alert
     }
   };
 
@@ -186,10 +177,10 @@ export const PagePlay = () => {
         setCurrentStep(newHistory.length); // Update the current step
         setGrid(newGrid); // Set the new grid
       } else {
-        alert("Invalid move! This number conflicts with Sudoku rules.");
+        alert("Invalid move! This number conflicts with Sudoku rules."); // Basic browser alert
       }
     } else {
-      alert("Please select a cell first!");
+      alert("Please select a cell first!"); // Basic browser alert
     }
   };
 
@@ -227,10 +218,10 @@ export const PagePlay = () => {
         setCurrentStep(newHistory.length); // Update the current step
         setGrid(newGrid); // Set the new grid
       } else {
-        alert("You cannot erase a pre-filled cell.");
+        alert("You cannot erase a pre-filled cell."); // Basic browser alert
       }
     } else {
-      alert("Please select a cell first!");
+      alert("Please select a cell first!"); // Basic browser alert
     }
   };
 
@@ -243,33 +234,10 @@ export const PagePlay = () => {
 
   return (
     <div className="page-play">
-      {error && (
-        <Alert status="error" mb={4}>
-          <AlertIcon />
-          <AlertTitle mr={2}>Invalid Move!</AlertTitle>
-          <AlertDescription>{error}</AlertDescription>
-          <CloseButton
-            position="absolute"
-            right="8px"
-            top="8px"
-            onClick={() => setError(null)}
-          />
-        </Alert>
-      )}
       <div className="div-2">
         <div className="text-wrapper-14">
           Difficulty: {difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}
         </div>
-        {/* <div className="overlap-5">
-          <div className="text-wrapper-15">03:56</div>
-          <div className="ellipse" />
-          <div className="rectangle-4" />
-          <div className="ellipse-2" />
-          <div className="ellipse-3" />
-          <div className="rectangle-5" />
-          <div className="ellipse-4" />
-          <div className="ellipse-5" />
-        </div> */}
 
         {/* Sudoku Grid */}
         <div className="sudoku-grid">{renderGrid()}</div>
@@ -278,20 +246,10 @@ export const PagePlay = () => {
         <Modal show={showRules} handleClose={handleToggleRules}>
           <h2>Sudoku Rules</h2>
           <ul>
-            <li>
-              Each row must contain the numbers 1 to 9 without repetition.
-            </li>
-            <li>
-              Each column must contain the numbers 1 to 9 without repetition.
-            </li>
-            <li>
-              Each 3x3 sub-grid must contain the numbers 1 to 9 without
-              repetition.
-            </li>
-            <li>
-              The puzzle is solved when all cells are correctly filled according
-              to these rules.
-            </li>
+            <li>Each row must contain the numbers 1 to 9 without repetition.</li>
+            <li>Each column must contain the numbers 1 to 9 without repetition.</li>
+            <li>Each 3x3 sub-grid must contain the numbers 1 to 9 without repetition.</li>
+            <li>The puzzle is solved when all cells are correctly filled according to these rules.</li>
           </ul>
         </Modal>
 
@@ -299,29 +257,10 @@ export const PagePlay = () => {
         <Modal show={showTips} handleClose={handleToggleTips}>
           <h2>Sudoku Tips</h2>
           <ul>
-            <li>
-              Start with easy clues: Look for rows, columns, or grids with only
-              a few missing numbers.
-            </li>
-            <li>
-              Use the process of elimination: If a number can only fit in one
-              place, put it there.
-            </li>
-            <li>
-              Work systematically: Solve for one number at a time across the
-              grid.
-            </li>
-            <li>
-              Use pencil marks: Write down possible numbers in each empty cell.
-            </li>
-            <li>
-              Look for naked pairs: Two cells in a row, column, or block that
-              can only be two numbers.
-            </li>
-            <li>
-              Stay patient: Sudoku is a logic puzzle, so take your time and
-              think each move through.
-            </li>
+            <li>Start with easy clues: Look for rows, columns, or grids with only a few missing numbers.</li>
+            <li>Use the process of elimination: If a number can only fit in one place, put it there.</li>
+            <li>Work systematically: Solve for one number at a time across the grid.</li>
+            <li>Use pencil marks: Write down possible numbers in each empty cell.</li>
           </ul>
         </Modal>
 
@@ -356,33 +295,6 @@ export const PagePlay = () => {
               ))}
             </div>
 
-            {/* Additional controls */}
-
-            <div className="noun-notes">
-              {/* <div className="overlap-8">
-                <img
-                  className="vector-4"
-                  alt="Vector"
-                  src="/img/vector-1.svg"
-                />
-                <div className="group-18">
-                  <div className="overlap-group-7">
-                    <div className="text-wrapper-22">OFF</div>
-                  </div>
-                </div>
-                <div className="text-wrapper-23">Notes</div>
-              </div> */}
-            </div>
-            {/* <div className="group-19">
-              <div className="overlap-9">
-                <img
-                  className="noun-hint"
-                  alt="Noun hint"
-                  src="/img/noun-hint-2018232-1.svg"
-                />
-                <div className="text-wrapper-24">Hint</div>
-              </div>
-            </div> */}
             <div className="button-container">
               <button className="erase-button" onClick={handleEraseClick}>
                 <img
@@ -395,7 +307,7 @@ export const PagePlay = () => {
               <button className="undo-button" onClick={handleUndoClick}>
                 <img
                   className="button-icon"
-                  src="/img/undo.svg"
+                  src="/img/undo-icon.svg"
                   alt="Undo Icon"
                 />
                 <span>Undo</span>
@@ -403,12 +315,12 @@ export const PagePlay = () => {
               <button className="redo-button" onClick={handleRedoClick}>
                 <img
                   className="button-icon"
-                  src="/img/redo.svg"
+                  src="/img/redo-icon.svg"
                   alt="Redo Icon"
                 />
                 <span>Redo</span>
               </button>
-            </div>  
+            </div>
           </div>
         </div>
 
@@ -450,9 +362,6 @@ export const PagePlay = () => {
           </button>
           <img className="vector-6" alt="Vector" src="/img/vector-2.svg" />
         </div>
-        {/* <div className="group-25">
-          <div className="text-wrapper-29">Save</div>
-        </div> */}
       </div>
     </div>
   );

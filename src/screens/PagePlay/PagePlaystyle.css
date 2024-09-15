@@ -581,7 +581,7 @@
 .page-play .frame-14 {
   background-image: url(../../../static/img/rectangle-2.svg);
   background-size: 100% 100%;
-  height: 99px;
+  height: 100px;
   left: 0;
   position: absolute;
   top: 924px;
@@ -697,43 +697,27 @@
 .sudoku-grid {
   display: grid;
   grid-template-columns: repeat(9, 1fr); /* 9 columns */
-  gap: 2px; /* Small gap between cells, adjust if needed */
-  width: max-content; /* Adjust based on the total width you want */
-  right: 300px;
-  margin: 50px auto; /* Increase margin to push it down slightly, centers horizontally */
-  border: 2px solid #000; /* Bold border around the entire grid */
-  position: relative; /* Use relative for slight adjustments or absolute for more control */
-  top: 250px; /* Adjust this value to move it down relative to its current position */
-}
-
-.sudoku-row {
-  display: contents;
+  gap: 1px;
+  max-width: 504px; /* 9 * 56px */
+  margin: 0 auto;
+  position: absolute;
+  left: 150px;
+  top: 250px;
+  border: 2px solid #000; /* Outer border */
 }
 
 .sudoku-cell {
-  width: 50px;  /* Size of each cell */
-  height: 50px;
+  width: 56px;
+  height: 56px;
   text-align: center;
-  font-size: 18px; /* Adjust font size as needed */
-  border: 1px solid #ccc; /* Lighter border for individual cells */
-  box-sizing: border-box; /* Ensures borders are included in width/height */
+  font-size: 24px;
+  border: 1px solid #000;
+  box-sizing: border-box;
+  background-color: #f0f0f0; /* Light background color for all cells */
 }
 
-/* Thicker borders for 3x3 sub-grids */
-.sudoku-cell:nth-child(3n) {
-  border-right: 2px solid #000; /* Thicker right border after every 3 cells */
-}
-
-.sudoku-row:nth-child(3n) .sudoku-cell {
-  border-bottom: 2px solid #000; /* Thicker bottom border after every 3 rows */
-}
-
-.sudoku-row:nth-child(3n+1) .sudoku-cell {
-  border-top: 2px solid #000; /* Thicker top border starting every new block row */
-}
-
-.sudoku-cell:nth-child(3n+1) {
-  border-left: 2px solid #000; /* Thicker left border starting every new block column */
+.sudoku-cell:nth-child(odd) {
+  background-color: #e6e6e6; /* Slightly darker color for alternating cells */
 }
 
 .number-buttons {
@@ -746,7 +730,7 @@
 }
 
 .sudoku-number {
-  background-color: #2c2c2e;
+  background-color: #2C2C2E;
   color: white;
   border: none;
   border-radius: 8px;
@@ -765,155 +749,6 @@
 
 .sudoku-cell.selected {
   background-color: #add8e6; /* Light blue background for the selected cell */
-}
-
-.button-style {
-  flex-grow: 1; /* Makes each button expand to fill the available space */
-  margin: 0; /* Removes margin around buttons */
-  padding: 11px 20px; /* Adjust padding to control button size */
-  text-align: center;
-  background-color: #14213d;
-  color: white;
-  border: none;
-  border-right: 2px solid #ffffff; /* Adds a white border to the right of each button */
-  font-size: 16px;
-  cursor: pointer;
-  box-sizing: border-box;
-}
-
-.button-style:last-child {
-  border-right: none; /* Removes border for the last button */
-}
-
-.button-style:hover {
-  background-color: #388fa2; /* Darker shade on hover */
-}
-
-/* Remove margin and adjust the display to ensure the buttons are touching */
-.navigation-6 {
-  display: flex; /* Ensures items are laid out in a row */
-  justify-content: center; /* Centers buttons horizontally within the container */
-  align-items: center; /* Centers buttons vertically */
-  gap: 0; /* Removes any space between buttons */
-  padding: 0; /* No padding inside the container */
-  margin: 0 auto; /* Centers the navigation container horizontally */
-  width: auto; /* Adjust width as needed, or remove for automatic adjustment */
-  background-color: #14213d; /* Optional: Background color for the navbar */
-}
-
-/* Styling for the difficulty selection container */
-.difficulty-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 20px;
-}
-
-/* Sexy label styling */
-.difficulty-label {
-  font-size: 22px; /* Slightly larger text for visibility */
-  margin-right: 15px; /* Space between label and dropdown */
-  color: #e63946; /* A striking color for the label (red for accent) */
-  font-weight: 700; /* Make the label bold */
-  text-transform: uppercase; /* Make it all caps for a sleek look */
-  letter-spacing: 1.2px; /* Add some spacing for more readability */
-}
-
-/* Sexy dropdown styling */
-.difficulty-select {
-  padding: 12px 20px; /* Padding inside the dropdown */
-  border-radius: 8px; /* Rounded corners for a modern look */
-  border: 2px solid transparent; /* Initial transparent border */
-  background-color: #14213d; /* Dark background color to contrast with text */
-  color: #ffffff; /* White text for readability */
-  font-size: 18px; /* Font size for the dropdown text */
-  cursor: pointer; /* Show pointer cursor */
-  font-weight: 600; /* Bold font to match the label */
-  transition: all 0.3s ease-in-out; /* Smooth transition for hover/focus effects */
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
-}
-
-/* On hover or focus, make it pop! */
-.difficulty-select:hover,
-.difficulty-select:focus {
-  background-color: #39d8e6; /* Change to the accent color on hover/focus */
-  color: #ffffff; /* Keep text white */
-  border-color: #f1faee; /* Add a contrasting border */
-  outline: none; /* Remove the default focus outline */
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15); /* Enhance shadow for depth on interaction */
-}
-
-/* Add custom arrow for dropdown */
-.difficulty-select {
-  appearance: none; /* Remove default browser arrow */
-  background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="white" class="bi bi-chevron-down" viewBox="0 0 16 16"> <path fill-rule="evenodd" d="M1.646 5.854a.5.5 0 0 1 .708 0L8 11.207l5.646-5.353a.5.5 0 1 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/></svg>');
-  background-repeat: no-repeat;
-  background-position: right 10px center;
-  background-size: 16px;
-}
-
-/* Optional: Dropdown open/closed state if needed */
-.difficulty-select:focus-within {
-  background-color: #39d8e6; /* Keep same hover color */
-  border-color: #f1faee;
-}
-
-
-.button-container {
-  display: flex;
-  gap: 10px; /* Adjust the space between buttons */
-  margin-top: 55px;
-}
-
-/* Erase Button */
-.erase-button {
-  background-color: #457b9d; /* Different background color */
-  color: white;
-  padding: 10px 20px;
-  text-align: center;
-  border: none;
-  font-size: 16px;
-  cursor: pointer;
-  border-radius: 4px;
-  transition: background-color 0.3s ease;
-}
-
-.erase-button:hover {
-  background-color: #1d3557; /* Different hover color */
-}
-
-/* Undo Button */
-.undo-button {
-  background-color: #457b9d;
-  color: white;
-  padding: 10px 20px;
-  text-align: center;
-  border: none;
-  font-size: 16px;
-  cursor: pointer;
-  border-radius: 4px;
-  transition: background-color 0.3s ease;
-}
-
-.undo-button:hover {
-  background-color: #1d3557;
-}
-
-/* Redo Button */
-.redo-button {
-  background-color: #457b9d;
-  color: white;
-  padding: 10px 20px;
-  text-align: center;
-  border: none;
-  font-size: 16px;
-  cursor: pointer;
-  border-radius: 4px;
-  transition: background-color 0.3s ease;
-}
-
-.redo-button:hover {
-  background-color: #1d3557;
 }
 
 /* Optional: Adjust font size for different screen sizes */
