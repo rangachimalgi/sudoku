@@ -246,10 +246,20 @@ export const PagePlay = () => {
         <Modal show={showRules} handleClose={handleToggleRules}>
           <h2>Sudoku Rules</h2>
           <ul>
-            <li>Each row must contain the numbers 1 to 9 without repetition.</li>
-            <li>Each column must contain the numbers 1 to 9 without repetition.</li>
-            <li>Each 3x3 sub-grid must contain the numbers 1 to 9 without repetition.</li>
-            <li>The puzzle is solved when all cells are correctly filled according to these rules.</li>
+            <li>
+              Each row must contain the numbers 1 to 9 without repetition.
+            </li>
+            <li>
+              Each column must contain the numbers 1 to 9 without repetition.
+            </li>
+            <li>
+              Each 3x3 sub-grid must contain the numbers 1 to 9 without
+              repetition.
+            </li>
+            <li>
+              The puzzle is solved when all cells are correctly filled according
+              to these rules.
+            </li>
           </ul>
         </Modal>
 
@@ -257,10 +267,21 @@ export const PagePlay = () => {
         <Modal show={showTips} handleClose={handleToggleTips}>
           <h2>Sudoku Tips</h2>
           <ul>
-            <li>Start with easy clues: Look for rows, columns, or grids with only a few missing numbers.</li>
-            <li>Use the process of elimination: If a number can only fit in one place, put it there.</li>
-            <li>Work systematically: Solve for one number at a time across the grid.</li>
-            <li>Use pencil marks: Write down possible numbers in each empty cell.</li>
+            <li>
+              Start with easy clues: Look for rows, columns, or grids with only
+              a few missing numbers.
+            </li>
+            <li>
+              Use the process of elimination: If a number can only fit in one
+              place, put it there.
+            </li>
+            <li>
+              Work systematically: Solve for one number at a time across the
+              grid.
+            </li>
+            <li>
+              Use pencil marks: Write down possible numbers in each empty cell.
+            </li>
           </ul>
         </Modal>
 
@@ -353,7 +374,6 @@ export const PagePlay = () => {
           <button className="button-style" onClick={handleRestartClick}>
             Restart
           </button>
-
           <img className="vector-5" alt="Vector" src="/img/vector-2.svg" />
         </div>
         <div className="group-24">
