@@ -249,7 +249,6 @@ export const Screen8 = () => {
     }
   };
 
-
   return (
     <div className="screen-8">
       <div className="page-6">
@@ -291,16 +290,15 @@ export const Screen8 = () => {
             </div>
           </div>
           <div className="navigation-9">
-            <div className="tab-9" onClick={handleNewGameClick}>
-              New Game
-            </div>{" "}
-            {/* Add onClick handler */}
-            <div className="tab-9" onClick={handleToggleRules}>
+            <button className="button-style" onClick={handleNewGameClick}>
+              New
+            </button>
+            <button className="button-style" onClick={handleToggleRules}>
               Rules
-            </div>
-            <div className="tab-9" onClick={handleToggleTips}>
+            </button>
+            <button className="button-style" onClick={handleToggleTips}>
               Tips
-            </div>
+            </button>
           </div>
         </div>
         {/* Modal for displaying rules */}
@@ -370,11 +368,11 @@ export const Screen8 = () => {
         <div className="frame-23">
           <div className="group-54">
             <div className="overlap-25">
-              <div className="noun-erase-4" onClick={handleEraseClick}>
+              {/* <div className="noun-erase-4" onClick={handleEraseClick}>
                 <img className="vector-15" alt="Vector" src="/img/vector.svg" />
                 <div className="text-wrapper-60">Erase</div>
-              </div>
-              <div className="noun-notes-4">
+              </div> */}
+              {/* <div className="noun-notes-4">
                 <div className="overlap-26">
                   <img
                     className="vector-16"
@@ -388,9 +386,9 @@ export const Screen8 = () => {
                   </div>
                   <div className="text-wrapper-62">Notes</div>
                 </div>
-              </div>
+              </div> */}
             </div>
-            <div className="group-56">
+            {/* <div className="group-56">
               <div className="overlap-27">
                 <img
                   className="noun-hint-4"
@@ -399,33 +397,51 @@ export const Screen8 = () => {
                 />
                 <div className="text-wrapper-63">Hint</div>
               </div>
-            </div>
-            <div className="group-57">
-              <div className="overlap-28" onClick={handleUndoClick}>
-                <img className="img-5" alt="Undo" src="/img/undo-3.svg" />
-                <div className="text-wrapper-64">Undo</div>
-              </div>
-            </div>
-            <div className="group-58">
-              <div className="overlap-28" onClick={handleRedoClick}>
-                <img className="img-5" alt="Redo" src="/img/redo-3.svg" />
-                <div className="text-wrapper-65">Redo</div>
-              </div>
+            </div> */}
+            <div className="button-container">
+              <button className="erase-button" onClick={handleEraseClick}>
+                <img
+                  className="button-icon"
+                  src="/img/vector.svg"
+                  alt="Erase Icon"
+                />
+                <span>Erase</span>
+              </button>
+              <button className="undo-button" onClick={handleUndoClick}>
+                <img
+                  className="button-icon"
+                  src="/img/undo.svg"
+                  alt="Undo Icon"
+                />
+                <span>Undo</span>
+              </button>
+              <button className="redo-button" onClick={handleRedoClick}>
+                <img
+                  className="button-icon"
+                  src="/img/redo.svg"
+                  alt="Redo Icon"
+                />
+                <span>Redo</span>
+              </button>
             </div>
           </div>
         </div>
         <div className="frame-24">
-          <p>Select Difficulty</p>
-          <br />
-          <select
-            value={difficulty}
-            onChange={(e) => setDifficulty(e.target.value)}
-            className="difficulty-select"
-          >
-            <option value="easy">Easy</option>
-            <option value="medium">Medium</option>
-            <option value="hard">Hard</option>
-          </select>
+          <div className="difficulty-container">
+            <label className="difficulty-label" htmlFor="difficulty">
+              Select Difficulty
+            </label>
+            <select
+              id="difficulty"
+              className="difficulty-select"
+              value={difficulty}
+              onChange={(e) => setDifficulty(e.target.value)}
+            >
+              <option value="easy">Easy</option>
+              <option value="medium">Medium</option>
+              <option value="hard">Hard</option>
+            </select>
+          </div>
           <div className="group-59">
             {/* Number buttons for input */}
             {[
@@ -484,7 +500,7 @@ export const Screen8 = () => {
           </div>
         </div>
         <div className="frame-26">
-          <div className="group-86">
+          {/* <div className="group-86">
             <div className="overlap-group-16">
               <div className="text-wrapper-82">03:56</div>
               <div className="ellipse-11" />
@@ -495,20 +511,22 @@ export const Screen8 = () => {
               <div className="ellipse-14" />
               <div className="ellipse-15" />
             </div>
-          </div>
+          </div> */}
           <div className="group-87">
-            <div className="text-wrapper-83" onClick={handleRestartClick}>
+            <button className="button-style" onClick={handleRestartClick}>
               Restart
-            </div>
+            </button>
             <img className="vector-17" alt="Vector" src="/img/vector-2.svg" />
           </div>
           <div className="group-88" onClick={handleResetClick}>
-            <div className="text-wrapper-83">Reset</div>
+            <button className="button-style" onClick={handleResetClick}>
+              Reset
+            </button>{" "}
             <img className="vector-18" alt="Vector" src="/img/vector-2.svg" />
           </div>
-          <div className="group-89">
+          {/* <div className="group-89">
             <div className="text-wrapper-83">Save</div>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
