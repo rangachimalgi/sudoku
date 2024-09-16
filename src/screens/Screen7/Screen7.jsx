@@ -110,6 +110,10 @@ export const Screen7 = () => {
     const puzzleGrid = removeNumbers(fullGrid, difficulty);
     setGrid(puzzleGrid);
     setInitialGrid(puzzleGrid); // Store the initial puzzle grid for resetting
+
+    // Initialize history and currentStep
+    setHistory([puzzleGrid]); // Start history with the initial grid
+    setCurrentStep(0);
   }, [difficulty]);
 
   const handleResetClick = () => {
@@ -173,19 +177,19 @@ export const Screen7 = () => {
         return;
       }
       const newValue = number.toUpperCase();
-  
+
       // Add validation here
       if (newValue && !isValidMove(grid, row, col, newValue)) {
         alert("Invalid move! This number conflicts with Sudoku rules.");
         return;
       }
-  
+
       const newGrid = grid.map((rowArr, rIndex) =>
         rowArr.map((cell, cIndex) =>
           rIndex === row && cIndex === col ? newValue : cell
         )
       );
-  
+
       const newHistory = history.slice(0, currentStep + 1); // Remove any "future" states
       setHistory([...newHistory, newGrid]); // Add the new grid to history
       setCurrentStep(newHistory.length); // Update the current step
@@ -194,7 +198,7 @@ export const Screen7 = () => {
       alert("Please select a cell first!");
     }
   };
-  
+
   const handleUndoClick = () => {
     if (currentStep > 0) {
       setCurrentStep(currentStep - 1);
@@ -254,7 +258,10 @@ export const Screen7 = () => {
   return (
     <div className="screen-7">
       <div className="page-5">
-        <div className="text-wrapper-46">Difficulty: Easy</div>
+        <div className="text-wrapper-46">
+          {" "}
+          Difficulty: {difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}
+        </div>
         <div className="text-wrapper-47">Sudoku 16 x 16</div>
         <div className="screen7-sudoku-grid">
           {grid.map((row, rowIndex) => (
@@ -296,9 +303,9 @@ export const Screen7 = () => {
             </div>
           </div>
           <div className="navigation-8">
-            <div className="tab-8" onClick={handleNewGameClick}>
-              New Game
-            </div>
+            <button className="button-style" onClick={handleNewGameClick}>
+              New
+            </button>
             {/* Modal for Sudoku Rules */}
             <Modal show={showRules} handleClose={handleToggleRules}>
               <h2>Sudoku Rules (16x16)</h2>
@@ -362,24 +369,18 @@ export const Screen7 = () => {
                 </li>
               </ul>
             </Modal>
-            <div className="tab-8" onClick={handleToggleRules}>
-              {" "}
-              {/* Toggle modal on click */}
+            <button className="button-style" onClick={handleToggleRules}>
               Rules
-            </div>{" "}
-            <div className="tab-8" onClick={handleToggleTips}>
+            </button>
+            <button className="button-style" onClick={handleToggleTips}>
               Tips
-            </div>
+            </button>
           </div>
         </div>
         <div className="frame-19">
           <div className="group-44">
             <div className="overlap-21">
-              <div className="noun-erase-3" onClick={handleEraseClick}>
-                <img className="vector-11" alt="Vector" src="/img/vector.svg" />
-                <div className="text-wrapper-49">Erase</div>
-              </div>
-              <div className="noun-notes-3">
+              {/* <div className="noun-notes-3">
                 <div className="overlap-22">
                   <img
                     className="vector-12"
@@ -393,9 +394,9 @@ export const Screen7 = () => {
                   </div>
                   <div className="text-wrapper-51">Notes</div>
                 </div>
-              </div>
+              </div> */}
             </div>
-            <div className="group-46">
+            {/* <div className="group-46">
               <div className="overlap-23">
                 <img
                   className="noun-hint-3"
@@ -404,35 +405,54 @@ export const Screen7 = () => {
                 />
                 <div className="text-wrapper-52">Hint</div>
               </div>
+            </div> */}
+            <div className="button-container">
+              <button className="erase-button" onClick={handleEraseClick}>
+                <img
+                  className="button-icon"
+                  src="/img/vector.svg"
+                  alt="Erase Icon"
+                />
+                <span>Erase</span>
+              </button>
+              <button className="undo-button" onClick={handleUndoClick}>
+                <img
+                  className="button-icon"
+                  src="/img/undo.svg"
+                  alt="Undo Icon"
+                />
+                <span>Undo</span>
+              </button>
+              <button className="redo-button" onClick={handleRedoClick}>
+                <img
+                  className="button-icon"
+                  src="/img/redo.svg"
+                  alt="Redo Icon"
+                />
+                <span>Redo</span>
+              </button>
             </div>
-            <div className="group-47">
-              <div className="overlap-24" onClick={handleUndoClick}>
-                <img className="img-4" alt="Undo" src="/img/undo-2.svg" />
-                <div className="text-wrapper-53">Undo</div>
-              </div>
-            </div>
-            <div className="group-48">
-              <div className="overlap-24" onClick={handleRedoClick}>
-                <img className="img-4" alt="Redo" src="/img/redo-2.svg" />
-                <div className="text-wrapper-54">Redo</div>
-              </div>
-            </div>
+            
           </div>
         </div>
         <div className="frame-20">
-          <p>Select Difficulty</p>
-          <br />
-          <select
-            value={difficulty}
-            onChange={(e) => setDifficulty(e.target.value)}
-            className="difficulty-select"
-          >
-            <option value="easy">Easy</option>
-            <option value="medium">Medium</option>
-            <option value="hard">Hard</option>
-          </select>
+          <div className="difficulty-container">
+            <label className="difficulty-label" htmlFor="difficulty">
+              Select Difficulty
+            </label>
+            <select
+              id="difficulty"
+              className="difficulty-select"
+              value={difficulty}
+              onChange={(e) => setDifficulty(e.target.value)}
+            >
+              <option value="easy">Easy</option>
+              <option value="medium">Medium</option>
+              <option value="hard">Hard</option>
+            </select>
+          </div>
           {/* <img className="group-49" alt="Group" src="/img/group-30.png" /> */}
-          <div className="button-box">
+          <div className="number-buttons">
             {[
               "1",
               "2",
@@ -450,10 +470,10 @@ export const Screen7 = () => {
               "E",
               "F",
               "G",
-            ].map((number) => (
+            ].map((number, index) => (
               <button
                 key={number}
-                className="number-button"
+                className="sudoku-number"
                 onClick={() => handleNumberButtonClick(number)}
               >
                 {number}
@@ -470,7 +490,7 @@ export const Screen7 = () => {
           </div>
         </div>
         <div className="frame-22">
-          <div className="group-50">
+          {/* <div className="group-50">
             <div className="overlap-group-12">
               <div className="text-wrapper-55">03:56</div>
               <div className="ellipse-6" />
@@ -481,21 +501,23 @@ export const Screen7 = () => {
               <div className="ellipse-9" />
               <div className="ellipse-10" />
             </div>
-          </div>
+          </div> */}
           <div className="group-51">
-            <div className="text-wrapper-56" onClick={handleRestartClick}>
+            <button className="button-style" onClick={handleRestartClick}>
               Restart
-            </div>
+            </button>
             <img className="vector-13" alt="Vector" src="/img/vector-2.svg" />
           </div>
           <div className="group-52" onClick={handleResetClick}>
-            <div className="text-wrapper-56">Reset</div>
+            <button className="button-style" onClick={handleResetClick}>
+              Reset
+            </button>{" "}
             <img className="vector-14" alt="Vector" src="/img/vector-2.svg" />
           </div>
 
-          <div className="group-53">
+          {/* <div className="group-53">
             <div className="text-wrapper-56">Save</div>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
