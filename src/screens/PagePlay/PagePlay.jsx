@@ -307,7 +307,7 @@ export const PagePlay = () => {
               <button className="undo-button" onClick={handleUndoClick}>
                 <img
                   className="button-icon"
-                  src="/img/undo-icon.svg"
+                  src="/img/undo.svg"
                   alt="Undo Icon"
                 />
                 <span>Undo</span>
@@ -315,7 +315,7 @@ export const PagePlay = () => {
               <button className="redo-button" onClick={handleRedoClick}>
                 <img
                   className="button-icon"
-                  src="/img/redo-icon.svg"
+                  src="/img/redo.svg"
                   alt="Redo Icon"
                 />
                 <span>Redo</span>

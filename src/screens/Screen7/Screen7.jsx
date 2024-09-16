@@ -97,7 +97,9 @@ export const Screen7 = () => {
   );
   const [selectedCell, setSelectedCell] = useState({ row: null, col: null });
   const [difficulty, setDifficulty] = useState("easy");
-  const [initialGrid, setInitialGrid] = useState([]); // Store the original puzzle grid
+  const [initialGrid, setInitialGrid] = useState(
+    Array.from({ length: 16 }, () => Array(16).fill(null))
+  );
   const [history, setHistory] = useState([]); // Stores grid states for undo/redo
   const [currentStep, setCurrentStep] = useState(0); // Tracks current position in the history
   const [showRules, setShowRules] = useState(false); // For displaying the rules modal
@@ -117,18 +119,25 @@ export const Screen7 = () => {
   // Check if a move is valid according to Sudoku rules
   const isValidMove = (grid, row, col, value) => {
     for (let x = 0; x < 16; x++) {
-      if (grid[row][x] === value || grid[x][col] === value) return false;
+      if (x !== col && grid[row][x] === value) return false; // Skip current cell
+      if (x !== row && grid[x][col] === value) return false; // Skip current cell
     }
+
     const startRow = Math.floor(row / 4) * 4;
     const startCol = Math.floor(col / 4) * 4;
     for (let i = 0; i < 4; i++) {
       for (let j = 0; j < 4; j++) {
-        if (grid[startRow + i][startCol + j] === value) return false;
+        const currentRow = startRow + i;
+        const currentCol = startCol + j;
+        if (
+          (currentRow !== row || currentCol !== col) && // Skip current cell
+          grid[currentRow][currentCol] === value
+        )
+          return false;
       }
     }
     return true;
   };
-
   // Handle input change in the grid
   const handleInputChange = (rowIndex, colIndex, value) => {
     if (value.match(/^[1-9a-gA-G]?$|^$/)) {
@@ -159,13 +168,24 @@ export const Screen7 = () => {
   const handleNumberButtonClick = (number) => {
     const { row, col } = selectedCell;
     if (row !== null && col !== null) {
+      if (initialGrid[row][col] !== null) {
+        alert("You cannot change a pre-filled cell.");
+        return;
+      }
       const newValue = number.toUpperCase();
-      const newGrid = grid.map((row, rIndex) =>
-        row.map((cell, cIndex) =>
+  
+      // Add validation here
+      if (newValue && !isValidMove(grid, row, col, newValue)) {
+        alert("Invalid move! This number conflicts with Sudoku rules.");
+        return;
+      }
+  
+      const newGrid = grid.map((rowArr, rIndex) =>
+        rowArr.map((cell, cIndex) =>
           rIndex === row && cIndex === col ? newValue : cell
         )
       );
-
+  
       const newHistory = history.slice(0, currentStep + 1); // Remove any "future" states
       setHistory([...newHistory, newGrid]); // Add the new grid to history
       setCurrentStep(newHistory.length); // Update the current step
@@ -174,7 +194,7 @@ export const Screen7 = () => {
       alert("Please select a cell first!");
     }
   };
-
+  
   const handleUndoClick = () => {
     if (currentStep > 0) {
       setCurrentStep(currentStep - 1);
@@ -224,7 +244,6 @@ export const Screen7 = () => {
     }
   };
 
-
   const handleRestartClick = () => {
     const fullGrid = generateSudokuBoard(); // Generate a new full Sudoku grid
     const puzzleGrid = removeNumbers(fullGrid, difficulty); // Remove numbers based on difficulty
@@ -260,7 +279,7 @@ export const Screen7 = () => {
                       e.target.value.toUpperCase()
                     )
                   }
-                  readOnly={cell !== null && cell !== ""}
+                  readOnly={initialGrid[rowIndex][colIndex] !== null}
                 />
               ))}
             </div>
