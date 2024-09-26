@@ -68,6 +68,38 @@ const removeNumbers = (grid, difficulty = "easy") => {
   return newGrid;
 };
 
+const isPuzzleValid = (grid) => {
+  const isValid = (grid, row, col, num) => {
+    for (let x = 0; x < 9; x++) {
+      if (grid[row][x] === num && col !== x) return false;
+      if (grid[x][col] === num && row !== x) return false;
+    }
+    const startRow = Math.floor(row / 3) * 3;
+    const startCol = Math.floor(col / 3) * 3;
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 3; j++) {
+        if (
+          grid[startRow + i][startCol + j] === num &&
+          (startRow + i !== row || startCol + j !== col)
+        ) {
+          return false;
+        }
+      }
+    }
+    return true;
+  };
+
+  for (let row = 0; row < 9; row++) {
+    for (let col = 0; col < 9; col++) {
+      const num = grid[row][col];
+      if (!isValid(grid, row, col, num)) {
+        return false;
+      }
+    }
+  }
+  return true;
+};
+
 const isValidMove = (grid, row, col, num) => {
   for (let x = 0; x < 9; x++) {
     if (grid[row][x] === num || grid[x][col] === num) return false;
@@ -92,6 +124,21 @@ export const PagePlay = () => {
   const [currentStep, setCurrentStep] = useState(0); // Tracks current position in the history
   const [showRules, setShowRules] = useState(false); // For displaying the rules modal
   const [showTips, setShowTips] = useState(false); // For displaying the tips modal
+  const [totalGamesPlayed, setTotalGamesPlayed] = useState(0);
+
+  useEffect(() => {
+    const storedTotalGames = localStorage.getItem("totalGamesPlayed") || 0;
+    setTotalGamesPlayed(Number(storedTotalGames));
+  }, []);
+
+  // Save the total games played count to localStorage
+  const saveTotalGamesPlayed = (newCount) => {
+    localStorage.setItem("totalGamesPlayed", newCount);
+  };
+
+  const handleTotalGamesClick = () => {
+    alert(`Total games played: ${totalGamesPlayed}`);
+  };
 
   useEffect(() => {
     const fullGrid = generateSudokuBoard();
@@ -102,6 +149,38 @@ export const PagePlay = () => {
 
   const handleGridClick = () => {
     setSelectedCell({ row: null, col: null }); // Reset selection when clicking outside the grid
+  };
+
+  const isPuzzleCompleteAndValid = (grid) => {
+    const isValid = (grid, row, col, num) => {
+      for (let x = 0; x < 9; x++) {
+        if (grid[row][x] === num && col !== x) return false;
+        if (grid[x][col] === num && row !== x) return false;
+      }
+      const startRow = Math.floor(row / 3) * 3;
+      const startCol = Math.floor(col / 3) * 3;
+      for (let i = 0; i < 3; i++) {
+        for (let j = 0; j < 3; j++) {
+          if (
+            grid[startRow + i][startCol + j] === num &&
+            (startRow + i !== row || startCol + j !== col)
+          ) {
+            return false;
+          }
+        }
+      }
+      return true;
+    };
+
+    for (let row = 0; row < 9; row++) {
+      for (let col = 0; col < 9; col++) {
+        const num = grid[row][col];
+        if (num === null || !isValid(grid, row, col, num)) {
+          return false;
+        }
+      }
+    }
+    return true;
   };
 
   const handleInputChange = (rowIndex, colIndex, value) => {
@@ -122,6 +201,14 @@ export const PagePlay = () => {
         setHistory([...newHistory, newGrid]);
         setCurrentStep(newHistory.length); // Update the current step
         setGrid(newGrid); // Set the new grid
+
+        // After updating the grid, check if the puzzle is complete
+        if (isPuzzleCompleteAndValid(newGrid)) {
+          const newCount = totalGamesPlayed + 1;
+          setTotalGamesPlayed(newCount);
+          saveTotalGamesPlayed(newCount); // Save the updated count to localStorage
+          alert("Congratulations! You've completed the Sudoku puzzle.");
+        }
       } else {
         alert("Invalid move! This number conflicts with Sudoku rules."); // Basic browser alert
       }
@@ -140,6 +227,16 @@ export const PagePlay = () => {
 
   const handleToggleTips = () => {
     setShowTips(!showTips); // Toggle the modal's visibility for tips
+  };
+
+  const handleSubmitClick = () => {
+    if (isPuzzleCompleteAndValid(grid)) {
+      const newCount = totalGamesPlayed + 1;
+      saveTotalGamesPlayed(newCount);
+      alert("Congratulations! You've completed the Sudoku puzzle.");
+    } else {
+      alert("The puzzle is incomplete or incorrect.");
+    }
   };
 
   const renderGrid = () => {
@@ -341,6 +438,9 @@ export const PagePlay = () => {
                 />
                 <span>Redo</span>
               </button>
+              <button className="button-style-submit" onClick={handleSubmitClick}>
+                Submit
+              </button>
             </div>
           </div>
         </div>
@@ -359,6 +459,9 @@ export const PagePlay = () => {
               </button>
               <button className="button-style" onClick={handleToggleTips}>
                 Tips
+              </button>
+              <button className="button-style" onClick={handleTotalGamesClick}>
+                i
               </button>
             </div>
           </div>
