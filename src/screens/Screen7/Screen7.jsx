@@ -100,7 +100,6 @@ const isPuzzleCompleteAndValid = (grid) => {
   return true;
 };
 
-
 // Function to remove numbers to create the puzzle
 const removeNumbers = (grid, difficulty) => {
   const newGrid = grid.map((row) => [...row]);
@@ -141,15 +140,22 @@ export const Screen7 = () => {
   const [totalGamesPlayed, setTotalGamesPlayed] = useState(0);
 
   useEffect(() => {
+    const storedGames = localStorage.getItem("totalGamesPlayed16x16") || 0;
+    setTotalGamesPlayed(Number(storedGames));
+
     const fullGrid = generateSudokuBoard();
     const puzzleGrid = removeNumbers(fullGrid, difficulty);
     setGrid(puzzleGrid);
-    setInitialGrid(puzzleGrid); // Store the initial puzzle grid for resetting
+    setInitialGrid(puzzleGrid);
 
-    // Initialize history and currentStep
-    setHistory([puzzleGrid]); // Start history with the initial grid
+    setHistory([puzzleGrid]); // Initialize history
     setCurrentStep(0);
   }, [difficulty]);
+
+  const saveTotalGamesPlayed = (newCount) => {
+    localStorage.setItem("totalGamesPlayed16x16", newCount);
+  };
+  
 
   const handleResetClick = () => {
     setGrid(initialGrid); // Reset the current grid to the original puzzle
@@ -270,12 +276,12 @@ export const Screen7 = () => {
     } else {
       alert("The puzzle is incomplete or incorrect.");
     }
-  };
+  };  
 
-  // Handle button to display total games played
   const handleTotalGamesClick = () => {
     alert(`Total games played: ${totalGamesPlayed}`);
   };
+  
 
   const handleEraseClick = () => {
     if (selectedCell.row !== null && selectedCell.col !== null) {

@@ -118,6 +118,17 @@ const removeNumbers = (grid, difficulty) => {
   return newGrid;
 };
 
+const isPuzzleCompleteAndValid = (grid) => {
+  for (let row = 0; row < 25; row++) {
+    for (let col = 0; col < 25; col++) {
+      if (!grid[row][col] || !isValidMove(grid, row, col, grid[row][col])) {
+        return false;
+      }
+    }
+  }
+  return true;
+};
+
 export const Screen8 = () => {
   const navigate = useNavigate();
 
@@ -132,6 +143,21 @@ export const Screen8 = () => {
   const [currentStep, setCurrentStep] = useState(0); // Tracks current position in the history
   const [showRules, setShowRules] = useState(false); // For toggling rules modal
   const [showTips, setShowTips] = useState(false); // For displaying the tips modal
+  const [totalGamesPlayed, setTotalGamesPlayed] = useState(0);
+
+  useEffect(() => {
+    const storedGames = localStorage.getItem("totalGamesPlayed25x25") || 0;
+    setTotalGamesPlayed(Number(storedGames));
+    // Generate initial puzzle...
+  }, [difficulty]);
+
+  const handleTotalGamesClick = () => {
+    alert(`Total games played (25x25): ${totalGamesPlayed}`);
+  };
+
+  const saveTotalGamesPlayed = (newCount) => {
+    localStorage.setItem("totalGamesPlayed25x25", newCount);
+  };
 
   useEffect(() => {
     // Generate a new Sudoku board based on difficulty
@@ -187,6 +213,17 @@ export const Screen8 = () => {
         setCurrentStep(newHistory.length); // Update the current step to reflect the latest move
         setGrid(newGrid); // Update the grid
       }
+    }
+  };
+
+  const handleSubmitClick = () => {
+    if (isPuzzleCompleteAndValid(grid)) {
+      const newCount = totalGamesPlayed + 1;
+      setTotalGamesPlayed(newCount);
+      saveTotalGamesPlayed(newCount); // Save to local storage for 25x25
+      alert("Congratulations! You've completed the Sudoku puzzle.");
+    } else {
+      alert("The puzzle is incomplete or incorrect.");
     }
   };
 
@@ -301,6 +338,9 @@ export const Screen8 = () => {
             </button>
             <button className="button-style" onClick={handleToggleTips}>
               Tips
+            </button>
+            <button className="button-style" onClick={handleTotalGamesClick}>
+              Total Games Played
             </button>
           </div>
         </div>
@@ -426,6 +466,9 @@ export const Screen8 = () => {
                 />
                 <span>Redo</span>
               </button>
+              <button className="button-style" onClick={handleSubmitClick}>
+                Submit
+              </button>
             </div>
           </div>
         </div>
@@ -448,7 +491,6 @@ export const Screen8 = () => {
           <div className="group-59">
             {/* Number buttons for input */}
             {[
-              
               "A",
               "B",
               "C",
