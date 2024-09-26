@@ -4,85 +4,88 @@ import "./style.css";
 import { Modal } from "../Modal";
 
 // Function to generate a valid 25x25 Sudoku board
+// Function to generate a valid 25x25 Sudoku board without recursion
 const generateSudokuBoard = () => {
-  const grid = Array(25)
+  const size = 25;
+  const base = 5;
+  const symbols = [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I",
+    "J",
+    "K",
+    "L",
+    "M",
+    "N",
+    "O",
+    "P",
+    "Q",
+    "R",
+    "S",
+    "T",
+    "U",
+    "V",
+    "W",
+    "X",
+    "Y",
+  ];
+
+  // Create a base grid using a mathematical formula
+  const grid = Array(size)
     .fill(null)
-    .map(() => Array(25).fill(null));
+    .map(() => Array(size).fill(null));
 
-  const isValid = (grid, row, col, num) => {
-    // Check if the number is not already in the current row or column
-    for (let x = 0; x < 25; x++) {
-      if (grid[row][x] === num || grid[x][col] === num) return false;
+  for (let row = 0; row < size; row++) {
+    for (let col = 0; col < size; col++) {
+      grid[row][col] = symbols[(row * base + col) % size];
     }
+  }
 
-    // Check the 5x5 subgrid
-    const startRow = Math.floor(row / 5) * 5;
-    const startCol = Math.floor(col / 5) * 5;
-    for (let i = 0; i < 5; i++) {
-      for (let j = 0; j < 5; j++) {
-        if (grid[startRow + i][startCol + j] === num) return false;
-      }
+  // Shuffle the grid to randomize it
+  return shuffleGrid(grid);
+};
+
+const transpose = (grid) => {
+  return grid[0].map((_, colIndex) => grid.map((row) => row[colIndex]));
+};
+
+const shuffleGrid = (grid) => {
+  const size = 25;
+  const base = 5;
+
+  const shuffle = (array) => {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
     }
-    return true;
   };
 
-  const fillGrid = (grid) => {
-    const symbols = [
-      "1",
-      "2",
-      "3",
-      "4",
-      "5",
-      "6",
-      "7",
-      "8",
-      "9",
-      "A",
-      "B",
-      "C",
-      "D",
-      "E",
-      "F",
-      "G",
-      "H",
-      "I",
-      "J",
-      "K",
-      "L",
-      "M",
-      "N",
-      "O",
-      "P",
-      "Q",
-      "R",
-      "S",
-      "T",
-      "U",
-      "V",
-      "W",
-      "X",
-      "Y",
-    ];
-
-    for (let row = 0; row < 25; row++) {
-      for (let col = 0; col < 25; col++) {
-        if (grid[row][col] === null) {
-          const shuffledSymbols = symbols.sort(() => Math.random() - 0.5);
-          for (let symbol of shuffledSymbols) {
-            if (isValid(grid, row, col, symbol)) {
-              grid[row][col] = symbol;
-              if (fillGrid(grid)) return true;
-              grid[row][col] = null; // Reset on failure
-            }
-          }
-          return false; // Backtrack
-        }
-      }
+  // Shuffle rows within each band
+  for (let i = 0; i < size; i += base) {
+    const rows = grid.slice(i, i + base);
+    shuffle(rows);
+    for (let j = 0; j < base; j++) {
+      grid[i + j] = rows[j];
     }
-    return true;
-  };
+  }
 
-  fillGrid(grid); // Generate a fully filled Sudoku board
+  // Shuffle columns within each stack
+  grid = transpose(grid);
+  for (let i = 0; i < size; i += base) {
+    const cols = grid.slice(i, i + base);
+    shuffle(cols);
+    for (let j = 0; j < base; j++) {
+      grid[i + j] = cols[j];
+    }
+  }
+  grid = transpose(grid);
+
   return grid;
 };
 
@@ -445,15 +448,7 @@ export const Screen8 = () => {
           <div className="group-59">
             {/* Number buttons for input */}
             {[
-              "1",
-              "2",
-              "3",
-              "4",
-              "5",
-              "6",
-              "7",
-              "8",
-              "9",
+              
               "A",
               "B",
               "C",
